@@ -9,10 +9,17 @@ class UserController{
     }
 
     create(user) {
-        httpCode = 500
         var httpCode = this.userSerializer.create(user)
-        console.log(`Creation finished with code ${httpCode}`)
-        return httpCode
+        var message
+        switch (httpCode) {
+            case 500 :
+                message = "Internal error"
+            case 409 :
+                message = "Username is already taken"
+            case 201 :
+                message = "OK"    
+        }
+        return {message : message, statusCode: httpCode}
     }
 }
 
