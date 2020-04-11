@@ -9,7 +9,7 @@ class UserController{
     }
 
     create(user) {
-         this.userSerializer.create(user).then(httpCode => {
+         this.userSerializer.create(user, function(httpCode) {
             var message
             switch (httpCode) {
                 case 500 :
