@@ -12,7 +12,8 @@ class UserSerializer {
         var httpCode = 201
         var queryValue = `INSERT INTO users (username, password) VALUES ('${user.username}', '${user.password}')`
         return this.client.query(queryValue)
-          .then(rows => { 
+          .then(rows => {
+            console.log(JSON.stringify(err))
             console.log(`request passed with: ${httpCode}`)  
             return httpCode
           })
