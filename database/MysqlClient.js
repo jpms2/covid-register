@@ -20,7 +20,7 @@ class MysqlClient {
 
     query(query) {
       try {
-        return connection.query(query)  
+        return await connection.query(query)  
       } catch (error) {
         return error
       }
