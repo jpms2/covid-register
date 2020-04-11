@@ -13,7 +13,7 @@ class UserSerializer {
         var queryValue = `INSERT INTO users (username, password) VALUES ('${user.username}', '${user.password}')`
         return this.client.query(queryValue)
           .then(rows => {
-            console.log(JSON.stringify(err))
+            console.log(JSON.stringify(rows))
             console.log(`request passed with: ${httpCode}`)  
             return httpCode
           })
