@@ -16,8 +16,9 @@ mysqlClient.connect()
 userController = new UserController(mysqlClient)
 
 app.post("/create/user", (req, res, next) => {
-    message = userController.create(req.body.user)
-    res.status(message.statusCode).send(message)
+    userController.create(req.body.user).then(message => {
+        res.status(message.statusCode).send(message)
+    })
 });
 
 /*
