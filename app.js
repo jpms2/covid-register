@@ -16,7 +16,8 @@ mysqlClient.connect()
 userController = new UserController(mysqlClient)
 
 app.post("/create/user", (req, res, next) => {
-    res.status(userController.create(req.body.user))
+    status = userController.create(req.body.user)
+    res.status(status)
 });
 
 /*
@@ -40,10 +41,6 @@ app.post("/pacient/list", (req, res) => {
     res.json(pacientController.list(list))
 });
 */
-
-app.use(function(error, req, res, next) {
-    res.status(500).json(error)
-})
 
 app.listen(port, () => {
  console.log("Server running on port " + port);
