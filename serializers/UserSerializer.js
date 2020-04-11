@@ -15,14 +15,13 @@ class UserSerializer {
           .then(rows => { 
             console.log(`request passed with: ${httpCode}`)  
             return httpCode
-        })
+          })
           .catch(err => {
-            if (err.code && err.errno) {
-                if (err.code == 'ER_DUP_ENTRY' || err.errno == 1062) {
-                    httpCode = 409
-                } else {
-                    httpCode = 500
-                }
+            console.log(JSON.stringify(result))
+            if (err.code == 'ER_DUP_ENTRY' || err.errno == 1062) {
+                httpCode = 409
+            } else {
+                httpCode = 500
             }
 
             console.log(`Failed request with: ${httpCode}`)
