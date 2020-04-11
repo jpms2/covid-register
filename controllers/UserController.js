@@ -9,7 +9,9 @@ class UserController{
     }
 
     create(user) {
-        return this.userSerializer.create(user)
+        httpCode = this.userSerializer.create(user)
+        console.log(`Creation finished with code ${httpCode}`)
+        return httpCode
     }
 }
 
