@@ -6,7 +6,7 @@ class MysqlClient {
     constructor(){}
 
     connect() {
-        connection = mysql.createConnection({config});
+        connection = mysql.createConnection(config);
     
           connection.connect(function(err) {
             if (err) throw err;
