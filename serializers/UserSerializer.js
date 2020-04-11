@@ -7,7 +7,7 @@ class UserSerializer {
         this.client = mysqlClient
     }
 
-    async create(user) {
+    create(user) {
         console.log(`Creating new user: ${user.username}`)
 
         return this.client.query(`INSERT INTO users (username, password) VALUES ('${user.username}', '${user.password}')`, function(error, rows){
