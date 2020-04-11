@@ -19,9 +19,8 @@ class MysqlClient {
     }
 
     query(query) {
-        return connection.query(query, function (err, result) {
+        connection.query(query, function (err, result) {
             if (err) {
-              console.log(typeof err)
               return err
             } 
 
