@@ -21,6 +21,8 @@ class MysqlClient {
     query(query) {
         connection.query(query, function (err, result) {
             if (err) throw err;
+
+            return result
           });
     }
 
