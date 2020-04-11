@@ -12,7 +12,10 @@ class UserSerializer {
         var httpCode = 201
         var queryValue = `INSERT INTO users (username, password) VALUES ('${user.username}', '${user.password}')`
         return this.client.query(queryValue)
-          .then(rows => { return httpCode})
+          .then(rows => { 
+            console.log(`request passed with: ${httpCode}`)  
+            return httpCode
+        })
           .catch(err => {
             if (result.code && result.errno) {
                 if (result.code == 'ER_DUP_ENTRY' || result.errno == 1062) {
@@ -22,6 +25,7 @@ class UserSerializer {
                 }
             }
 
+            console.log(`Failed request with: ${httpCode}`)
             return httpCode
         })
     }
