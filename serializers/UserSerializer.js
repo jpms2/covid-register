@@ -12,10 +12,8 @@ class UserSerializer {
         var httpCode = 201
 
        var result = this.client.query(`INSERT INTO users (username, password) VALUES ('${user.username}', '${user.password}')`)
-       console.log(typeof result)
-       if (result instanceof Error) {
-           console.log("Received error from mysql")
-           if (error.code == 'ER_DUP_ENTRY' || error.errno == 1062) {
+       if (result.code && result.errno) {
+           if (result.code == 'ER_DUP_ENTRY' || result.errno == 1062) {
                httpCode = 409
            } else {
                httpCode = 500
