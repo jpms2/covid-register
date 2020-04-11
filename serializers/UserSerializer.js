@@ -11,21 +11,17 @@ class UserSerializer {
         console.log(`Creating new user: ${user.username}`)
         var httpCode = 201
         var queryValue = `INSERT INTO users (username, password) VALUES ('${user.username}', '${user.password}')`
-        this.client.query(queryValue)
-          .then(rows => {
-            console.log(JSON.stringify(rows))
-            console.log(`request passed with: ${httpCode}`)  
-            return httpCode
-          })
-          .catch(err => {
-            console.log(JSON.stringify(err))
-            if (err.code == 'ER_DUP_ENTRY' || err.errno == 1062) {
-                httpCode = 409
-            } else {
-                httpCode = 500
+        var result = this.client.query(queryValue, function(err, result) {
+            if(err) {
+                if (result.code && result.errno) {
+                    if (result.code == 'ER_DUP_ENTRY' || result.errno == 1062) {
+                        httpCode = 409
+                    } else {
+                        httpCode = 500
+                    }
+                }
             }
 
-            console.log(`Failed request with: ${httpCode}`)
             return httpCode
         })
     }
