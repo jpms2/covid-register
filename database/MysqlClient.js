@@ -20,7 +20,7 @@ class MysqlClient {
 
     async query(sql) {
       var response = await connection.query(sql)
-      console.log(JSON.stringify(response))
+      console.log("Response was: " + JSON.stringify(response))
       return response
   }
 
