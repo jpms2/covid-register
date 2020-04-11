@@ -8,6 +8,8 @@ class UserSerializer {
     }
 
     create(user) {
+        console.log(`Creating user ${user.username}`)
+
         if (!this.client.isConnected()) {
             throw new Error("Failed to create user, could not establish connection to database")
         }
