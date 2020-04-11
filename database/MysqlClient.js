@@ -20,6 +20,7 @@ class MysqlClient {
 
     async query(sql) {
       const query = util.promisify(conn.query).bind(conn);
+      console.log("Preparing query")
       const rows = await query(sql);
       console.log(rows);
       
