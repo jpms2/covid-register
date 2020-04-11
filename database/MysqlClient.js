@@ -18,7 +18,7 @@ class MysqlClient {
         return connection.state === 'authenticated'
     }
 
-    query(query) {
+    async query(query) {
       try {
         return await connection.query(query)  
       } catch (error) {
