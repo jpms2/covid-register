@@ -19,9 +19,13 @@ class MysqlClient {
     }
 
     async query(sql) {
-      var response = await connection.query(sql)
+      const query = util.promisify(conn.query).bind(conn);
+      const rows = await query(sql);
+      console.log(rows);
+      
+      /*var response = await connection.query(sql)
       console.log("Response was: " + JSON.stringify(response))
-      return response
+      return response*/
   }
 
 }
