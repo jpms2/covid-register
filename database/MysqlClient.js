@@ -9,7 +9,7 @@ class MysqlClient {
         connection = mysql.createConnection({config});
     
           connection.connect(function(err) {
-            if (err) throw Error("Could not connect to mysql database", err);
+            if (err) throw err;
             console.log("Connected to database!");
           });
     }
