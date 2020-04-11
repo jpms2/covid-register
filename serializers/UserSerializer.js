@@ -11,7 +11,7 @@ class UserSerializer {
         console.log(`Creating new user: ${user.username}`)
         var httpCode = 201
 
-       result = this.client.query(`INSERT INTO users (username, password) VALUES ('${user.username}', '${user.password}')`)
+       var result = this.client.query(`INSERT INTO users (username, password) VALUES ('${user.username}', '${user.password}')`)
        if (result instanceof Error) {
            console.log("Received error from mysql")
            if (error.code == 'ER_DUP_ENTRY' || error.errno == 1062) {
@@ -20,7 +20,7 @@ class UserSerializer {
                httpCode = 500
            }
         }
-        
+
         return httpCode
     }
 }
