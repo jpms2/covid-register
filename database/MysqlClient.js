@@ -1,5 +1,6 @@
 var mysql = require('mysql')
 config = require('../configuration/APIConfiguration');
+const util = require('util');
 var connection
 
 class MysqlClient {
@@ -19,7 +20,7 @@ class MysqlClient {
     }
 
     async query(sql) {
-      const query = util.promisify(conn.query).bind(conn);
+      const query = util.promisify(connection.query).bind(connection);
       console.log("Preparing query")
       const rows = await query(sql);
       console.log(rows);
