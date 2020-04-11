@@ -19,15 +19,11 @@ class MysqlClient {
     }
 
     query(query) {
-      var response
-
-      connection.query(query, function (err, result) {
-          if (err) {
-            return err
-          } 
-
-          return result
-        })
+      try {
+        return connection.query(query)  
+      } catch (error) {
+        return error
+      }
     }
 
 }
