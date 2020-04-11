@@ -9,7 +9,7 @@ class UserController{
     }
 
     create(user) {
-        this.userSerializer.create(user)
+        return this.userSerializer.create(user)
     }
 }
 
