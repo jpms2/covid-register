@@ -17,7 +17,7 @@ class UserSerializer {
             return httpCode
           })
           .catch(err => {
-            console.log(JSON.stringify(result))
+            console.log(JSON.stringify(err))
             if (err.code == 'ER_DUP_ENTRY' || err.errno == 1062) {
                 httpCode = 409
             } else {
