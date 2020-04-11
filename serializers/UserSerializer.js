@@ -17,13 +17,13 @@ class UserSerializer {
         this.client.query(`INSERT INTO user (username, password) VALUES (${user.username}, ${user.password})`, function(error, rows){
             if (error) {
                 if (error.code == 'ER_DUP_ENTRY' || error.errno == 1062) {
-                    throw new UsernameAlreadyRegisteredError("Username is taken")
+                    return 409
                 } else {
-                    throw new InternalError("Internal error")
+                    return 500
                 }
             }
 
-            return rows
+            return 201
         })
     }
 }
