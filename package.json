@@ -1,0 +1,26 @@
+{
+  "name": "covid-register",
+  "version": "1.0.0",
+  "description": "Simple covid-19 register backend",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpms2/covid-register.git"
+  },
+  "keywords": [
+    "covid-19"
+  ],
+  "author": "jpms2",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jpms2/covid-register/issues"
+  },
+  "homepage": "https://github.com/jpms2/covid-register#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  }
+}
