@@ -10,7 +10,7 @@ class UserSerializer {
     create(user) {
         console.log(`Creating new user: ${user.username}`)
 
-        return this.client.query(`INSERT INTO users (username, password) VALUES ('${user.username}', '${user.password}')`, function(error, rows){
+        this.client.query(`INSERT INTO users (username, password) VALUES ('${user.username}', '${user.password}')`, function(error, rows){
             if (error) {
                 console.log("Received error from mysql")
                 if (error.code == 'ER_DUP_ENTRY' || error.errno == 1062) {
@@ -19,10 +19,10 @@ class UserSerializer {
                     return 500
                 }
             }
-
-            console.log("Query succeeded")
-            return 201
         })
+
+        console.log("Query succeeded")
+        return 201
     }
 }
 
