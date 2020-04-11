@@ -17,8 +17,8 @@ class UserSerializer {
             return httpCode
         })
           .catch(err => {
-            if (result.code && result.errno) {
-                if (result.code == 'ER_DUP_ENTRY' || result.errno == 1062) {
+            if (err.code && err.errno) {
+                if (err.code == 'ER_DUP_ENTRY' || err.errno == 1062) {
                     httpCode = 409
                 } else {
                     httpCode = 500
