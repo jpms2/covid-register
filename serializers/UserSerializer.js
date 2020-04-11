@@ -7,10 +7,10 @@ class UserSerializer {
         this.client = mysqlClient
     }
 
-    create(user) {
+    async create(user) {
         var httpCode = 201
         var queryValue = `INSERT INTO users (username, password) VALUES ('${user.username}', '${user.password}')`
-        var result = this.client.query(queryValue)
+        var result = await this.client.query(queryValue)
             console.log("Worked! " + JSON.stringify(result))
             return httpCode
 
