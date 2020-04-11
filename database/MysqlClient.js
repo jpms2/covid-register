@@ -23,10 +23,6 @@ class MysqlClient {
       const query = util.promisify(connection.query).bind(connection);
       console.log("Preparing query")
       return await query(sql);
-      
-      /*var response = await connection.query(sql)
-      console.log("Response was: " + JSON.stringify(response))
-      return response*/
   }
 
 }

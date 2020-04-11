@@ -8,8 +8,8 @@ class UserController{
         this.userSerializer = new UserSerializer(mysqlClient)
     }
 
-    create(user) {
-         return this.userSerializer.create(user, function(httpCode) {
+    async create(user) {
+         const httpCode = await this.userSerializer.create(user)
             console.log(JSON.stringify(httpCode))
             var message
             switch (httpCode) {
@@ -21,7 +21,6 @@ class UserController{
                     message = "OK"    
             }
             return {message : message, statusCode: httpCode}
-         })
     }
 }
 
