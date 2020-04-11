@@ -12,11 +12,9 @@ class UserSerializer {
         var queryValue = `INSERT INTO users (username, password) VALUES ('${user.username}', '${user.password}')`
         
         try {
-            var result = await this.client.query(queryValue)
-            console.log("Worked! " + JSON.stringify(result))
+            await this.client.query(queryValue)
             return httpCode
         } catch(err) {
-            console.log("Error: "+ JSON.stringify(err))
             if (err.code && err.errno) {
                 if (err.code == 'ER_DUP_ENTRY' || err.errno == 1062) {
                     httpCode = 409

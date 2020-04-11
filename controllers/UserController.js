@@ -10,7 +10,6 @@ class UserController{
 
     async create(user) {
          const httpCode = await this.userSerializer.create(user)
-            console.log(JSON.stringify(httpCode))
             var message
             switch (httpCode) {
                 case 500 :
