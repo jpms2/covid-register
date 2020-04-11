@@ -27,9 +27,7 @@ class MysqlClient {
           } 
 
           response = result
-        });
-
-        return response
+        })
     }
 
 }
