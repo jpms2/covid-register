@@ -23,10 +23,10 @@ class MysqlClient {
 
       connection.query(query, function (err, result) {
           if (err) {
-            response = err
+            return err
           } 
 
-          response = result
+          return result
         })
     }
 
