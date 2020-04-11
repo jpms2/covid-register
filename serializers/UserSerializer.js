@@ -11,18 +11,19 @@ class UserSerializer {
         console.log(`Creating new user: ${user.username}`)
         var httpCode = 201
         var queryValue = `INSERT INTO users (username, password) VALUES ('${user.username}', '${user.password}')`
-        return this.client.query(queryValue, function(err, result) {
-            if(err) {
-                console.log(JSON.stringify(err))
-                if (result.code && result.errno) {
-                    if (result.code == 'ER_DUP_ENTRY' || result.errno == 1062) {
-                        httpCode = 409
-                    } else {
-                        httpCode = 500
-                    }
+        this.client.query(queryValue).then(result => {
+            console.log(JSON.stringify(result))
+            return httpCode
+        }).catch(err => {
+            console.log(JSON.stringify(err))
+            if (err.code && err.errno) {
+                if (err.code == 'ER_DUP_ENTRY' || err.errno == 1062) {
+                    httpCode = 409
+                } else {
+                    httpCode = 500
                 }
             }
-            console.log(JSON.stringify(httpCode))
+
             return httpCode
         })
     }

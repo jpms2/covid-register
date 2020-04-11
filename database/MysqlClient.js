@@ -18,11 +18,10 @@ class MysqlClient {
         return connection.state === 'authenticated'
     }
 
-    query(sql) {
-      return connection.query(sql, function (err, result, fields) {
-        if (err) throw err;
-        return result;
-      });
+    async query(sql) {
+      var response = await connection.query(sql)
+      console.log(JSON.stringify(response))
+      return response
   }
 
 }
