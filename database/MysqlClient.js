@@ -19,7 +19,7 @@ class MysqlClient {
     }
 
     query(query) {
-        connection.query(sql, function (err, result) {
+        connection.query(query, function (err, result) {
             if (err) throw err;
           });
     }
