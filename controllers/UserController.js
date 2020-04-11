@@ -15,10 +15,13 @@ class UserController{
             switch (httpCode) {
                 case 500 :
                     message = "Internal error"
+                    break;
                 case 409 :
                     message = "Username is already taken"
+                    break;
                 case 201 :
-                    message = "OK"    
+                    message = "OK"
+                    break;
             }
             return {message : message, statusCode: httpCode}
     }
