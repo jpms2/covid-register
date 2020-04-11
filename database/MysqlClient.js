@@ -18,18 +18,15 @@ class MysqlClient {
         return connection.state === 'authenticated'
     }
 
-    query(query) {
-      return new Promise((resolve, reject) => {
-        connection.query(query, function(err, rows) {
-          if (err) { 
-            reject(err)
-          }
-  
-          resolve(rows)
-        })
-      }).then(result)
-      .catch(err)
-    }
+    query( sql, args ) {
+      return new Promise( (resolve, reject) => {
+          this.connection.query(sql, args, ( err, rows ) => {
+              if ( err )
+                  return reject( err );
+              resolve( rows );
+          } );
+      } );
+  }
 
 }
 
