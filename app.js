@@ -17,7 +17,7 @@ userController = new UserController(mysqlClient)
 
 app.post("/create/user", (req, res, next) => {
     status = userController.create(req.body.user)
-    res.status(status)
+    res.status(status).send("OK")
 });
 
 /*
