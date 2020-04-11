@@ -4,7 +4,7 @@ class UserBuilder {
     constructor(){}
 
     build(body) {
-        return new User(body.username, body.password)
+        return new User(body.user.username, body.user.password)
     }
 }
 

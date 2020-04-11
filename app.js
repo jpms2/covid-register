@@ -17,7 +17,7 @@ userController = new UserController(mysqlClient)
 
 app.post("/create/user", (req, res) => {
     try {
-        userController.create(req.body)
+        userController.create(req.body.user)
         res.status(200)        
     } catch (error) {
         res.status(500).json(error)
