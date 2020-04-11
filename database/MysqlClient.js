@@ -19,11 +19,16 @@ class MysqlClient {
     }
 
     query(query) {
-      connection.query(query, function(err, rows) {
-        if (err) { console.log(err)}
-
-        return rows
-      })
+      return new Promise((resolve, reject) => {
+        connection.query(query, function(err, rows) {
+          if (err) { 
+            reject(err)
+          }
+  
+          resolve(rows)
+        })
+      }).then(result)
+      .catch(err)
     }
 
 }
