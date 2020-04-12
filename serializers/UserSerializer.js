@@ -46,6 +46,7 @@ class UserSerializer {
             }).catch(err => {throw err})
         } catch (error) {
             console.log("Eror during query: " + JSON.stringify(error))
+            throw error
             return httpCode
         }
     }
