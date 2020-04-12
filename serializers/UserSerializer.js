@@ -28,25 +28,24 @@ class UserSerializer {
     }
 
     async authenticate(user) {
-        const httpCode = 500
+        var httpCode = 500
         var queryValue = `SELECT * FROM users WHERE username = '${user.username}'`
 
         try {
-            await this.client.query(queryValue).then(result => {
-                if (Array.isArray(result)) {
-                    if (result[0] && result[0].password) {
-                        httpCode = result[0].password === user.password ? 200 : 401
-                    } else {
-                        httpCode = 404
-                    }
+            const result =  await this.client.query(queryValue)
+
+            if (Array.isArray(result)) {
+                if (result[0] && result[0].password) {
+                    httpCode = result[0].password === user.password ? 200 : 401
+                } else {
+                    httpCode = 404
                 }
-    
-                console.log(JSON.stringify(result))
-                return httpCode
-            }).catch(err => {throw err})
+            }
+
+            console.log(JSON.stringify(result))
+            return httpCode
         } catch (error) {
             console.log("Eror during query: " + JSON.stringify(error))
-            throw error
             return httpCode
         }
     }
