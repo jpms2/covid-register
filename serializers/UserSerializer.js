@@ -29,7 +29,7 @@ class UserSerializer {
 
     async authenticate(user) {
         const httpCode = 500
-        var queryValue = `SELECT * FROM users WHERE username = ${user.username}`
+        var queryValue = `SELECT * FROM users WHERE username = '${user.username}'`
 
         try {
             const result =  await this.client.query(queryValue)
@@ -45,6 +45,7 @@ class UserSerializer {
             console.log(JSON.stringify(result))
             return httpCode
         } catch (error) {
+            console.log(JSON.stringify(error))
             return httpCode
         }
     }
