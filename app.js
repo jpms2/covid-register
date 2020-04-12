@@ -1,3 +1,5 @@
+require('dotenv').config
+
 var express = require("express");
 var app = express();
 app.use(express.json());
@@ -26,16 +28,37 @@ app.post("/create/user", (req, res, next) => {
 
 app.post("/authenticate", (req, res) => {
     userController.authenticate(req.body.user).then(message => {
+        if (message.statusCode === 200) {
+            message.accessToken = generateAccessToken(req.body.user)
+        }
+
         res.status(message.statusCode).send(message)
     })
 });
 
-/*
-app.post("/create/pacient", (req, res) => {
-    pacient = pacientBuilder.build(req.body)
-    res.json(pacientController.create(pacient))
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    if (token == null) return res.sendStatus(401)
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403)
+
+        req.user = user
+        next()
+    })
+}
+
+function generateAccessToken(user) {
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '30m'})
+}
+
+
+app.post("/create/pacient", authenticateToken, (req, res) => {
+    
 });
 
+/*
 app.get("/pacient/:cpf", (req, res) => {
     res.json(pacientController.find(req.param("cpf")));
 });
