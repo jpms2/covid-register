@@ -42,6 +42,7 @@ class UserSerializer {
                 }
             }
 
+            console.log(JSON.stringify(result))
             return httpCode
         } catch (error) {
             return httpCode
