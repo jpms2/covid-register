@@ -25,8 +25,9 @@ app.post("/create/user", (req, res, next) => {
 
 
 app.post("/authenticate", (req, res) => {
-    user = userSerializer.parse(req.body)
-    res.json(authController.authenticate(user))
+    userController.authenticate(req.body.user).then(message => {
+        res.status(message.statusCode).send(message)
+    })
 });
 
 /*
