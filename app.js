@@ -2,6 +2,8 @@ var express = require("express");
 var app = express();
 app.use(express.json());
 
+const jwt = require('jsonwebtoken')
+
 var UserController = require("./controllers/UserController")
 var MysqlClient = require("./database/MysqlClient")
 
@@ -21,13 +23,13 @@ app.post("/create/user", (req, res, next) => {
     })
 });
 
-/*
+
 app.post("/authenticate", (req, res) => {
     user = userSerializer.parse(req.body)
     res.json(authController.authenticate(user))
 });
 
-
+/*
 app.post("/create/pacient", (req, res) => {
     pacient = pacientBuilder.build(req.body)
     res.json(pacientController.create(pacient))

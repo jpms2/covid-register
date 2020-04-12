@@ -26,6 +26,27 @@ class UserSerializer {
             return httpCode
         }
     }
+
+    async authenticate(user) {
+        const httpCode = 500
+        var queryValue = `SELECT * FROM users WHERE username = ${user.username}`
+
+        try {
+            const result =  await this.client.query(queryValue)
+
+            if (Array.isArray(result)) {
+                if (result[0] && result[0].password) {
+                    httpCode = result[0].password === user.password ? 200 : 401
+                } else {
+                    httpCode = 404
+                }
+            }
+
+            return httpCode
+        } catch (error) {
+            return httpCode
+        }
+    }
 }
 
 module.exports = UserSerializer

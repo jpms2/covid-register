@@ -24,6 +24,24 @@ class UserController{
             }
             return {message : message, statusCode: httpCode}
     }
+
+    async authenticate(user) {
+        const httpCode = await this.userSerializer.authenticate(user)
+        var message
+        switch (httpCode) {
+            case 404: 
+                message = "User not found"
+                break
+            case 200:
+                message = "OK"
+                break
+            case 500 :
+                message = "Internal error"
+                break;
+        }
+
+        return{message : message, statusCode: httpCode}
+    }
 }
 
 module.exports = UserController
