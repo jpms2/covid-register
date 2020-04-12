@@ -41,8 +41,7 @@ class UserSerializer {
                     httpCode = 404
                 }
             }
-
-            console.log(JSON.stringify(result))
+            
             return httpCode
         } catch (error) {
             console.log("Eror during query: " + JSON.stringify(error))
