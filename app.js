@@ -29,7 +29,7 @@ app.post("/create/user", (req, res, next) => {
 app.post("/authenticate", (req, res) => {
     userController.authenticate(req.body.user).then(message => {
         if (message.statusCode === 200) {
-            message.accessToken = generateAccessToken(req.body.user)
+            message.accessToken = jwt.sign(req.body.user, process.env.ACCESS_TOKEN_SECRET)
         }
 
         res.status(message.statusCode).send(message)
@@ -48,11 +48,6 @@ function authenticateToken(req, res, next) {
         next()
     })
 }
-
-function generateAccessToken(user) {
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
-}
-
 
 app.post("/create/pacient", authenticateToken, (req, res) => {
     
