@@ -1,13 +1,13 @@
-require('dotenv').config
+require('dotenv').config()
 
-var express = require("express");
+import express, { json } from "express";
 var app = express();
-app.use(express.json());
+app.use(json());
 
-const jwt = require('jsonwebtoken')
+import { sign, verify } from 'jsonwebtoken';
 
-var UserController = require("./controllers/UserController")
-var MysqlClient = require("./database/MysqlClient")
+import UserController from "./controllers/UserController";
+import MysqlClient from "./database/MysqlClient";
 
 var port = process.argv.slice(2)[0];
 
@@ -27,10 +27,9 @@ app.post("/create/user", (req, res, next) => {
 
 
 app.post("/authenticate", (req, res) => {
-    console.log(process.env.ACCESS_TOKEN_SECRET)
     userController.authenticate(req.body.user).then(message => {
         if (message.statusCode === 200) {
-            message.accessToken = jwt.sign(req.body.user, process.env.ACCESS_TOKEN_SECRET)
+            message.accessToken = sign(req.body.user, process.env.ACCESS_TOKEN_SECRET)
         }
 
         res.status(message.statusCode).send(message)
@@ -42,7 +41,7 @@ function authenticateToken(req, res, next) {
     const token = authHeader && authHeader.split(' ')[1]
     if (token == null) return res.sendStatus(401)
 
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) return res.sendStatus(403)
 
         req.user = user
