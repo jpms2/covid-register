@@ -1,13 +1,13 @@
 require('dotenv').config()
 
-import express, { json } from "express";
+var express = require("express");
 var app = express();
-app.use(json());
+app.use(express.json());
 
-import { sign, verify } from 'jsonwebtoken';
+const jwt = require('jsonwebtoken')
 
-import UserController from "./controllers/UserController";
-import MysqlClient from "./database/MysqlClient";
+var UserController = require("./controllers/UserController")
+var MysqlClient = require("./database/MysqlClient")
 
 var port = process.argv.slice(2)[0];
 
@@ -29,7 +29,7 @@ app.post("/create/user", (req, res, next) => {
 app.post("/authenticate", (req, res) => {
     userController.authenticate(req.body.user).then(message => {
         if (message.statusCode === 200) {
-            message.accessToken = sign(req.body.user, process.env.ACCESS_TOKEN_SECRET)
+            message.accessToken = jwt.sign(req.body.user, process.env.ACCESS_TOKEN_SECRET)
         }
 
         res.status(message.statusCode).send(message)
@@ -41,7 +41,7 @@ function authenticateToken(req, res, next) {
     const token = authHeader && authHeader.split(' ')[1]
     if (token == null) return res.sendStatus(401)
 
-    verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
         if (err) return res.sendStatus(403)
 
         req.user = user
