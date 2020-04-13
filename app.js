@@ -50,7 +50,7 @@ function authenticateToken(req, res, next) {
 }
 
 app.post("/create/pacient", authenticateToken, (req, res) => {
-    
+    res.json("Trying to create pacient with user : " + user.username)
 });
 
 /*
