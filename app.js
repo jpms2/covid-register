@@ -27,6 +27,7 @@ app.post("/create/user", (req, res, next) => {
 
 
 app.post("/authenticate", (req, res) => {
+    console.log(process.env.ACCESS_TOKEN_SECRET)
     userController.authenticate(req.body.user).then(message => {
         if (message.statusCode === 200) {
             message.accessToken = jwt.sign(req.body.user, process.env.ACCESS_TOKEN_SECRET)
