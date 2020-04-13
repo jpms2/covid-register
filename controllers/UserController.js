@@ -32,6 +32,9 @@ class UserController{
             case 404: 
                 message = "User not found"
                 break
+            case 401:
+                message = "Wrong password"
+                break
             case 200:
                 message = "OK"
                 break
