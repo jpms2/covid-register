@@ -41,18 +41,21 @@ class PacientSerializer {
     }
 
     async addressQuery() {
+        console.log("Querying address")
         const addressQuery = `INSERT INTO addresses (street, number, neighborhood, reference_unit) VALUES ('${pacient.address.street}', '${pacient.address.number}', '${pacient.address.neighborhood}', '${pacient.address.reference_unit}')`
         const resultAddress = await this.client.query(addressQuery)
         return resultAddress.insertId
     }
 
     async reportQuery() {
+        console.log("Querying report")
         const reportQuery = `INSERT INTO reports (data_origin, comorbidity, covid_exam, covid_result, situation, notification_date, symptoms_start_date) VALUES '${pacient.report.data_origin}', '${pacient.report.comorbidity}', '${pacient.report.covid_exam}', '${pacient.report.covid_result}', '${pacient.report.situation}', '${pacient.report.notification_date}', '${pacient.report.symptoms_start_date}'`
         const resultReport = await this.client.query(reportQuery)
         return resultReport.insertId
     }
 
     async symptomsQuery() {
+        console.log("Querying symptoms")
         const symptomQueries = symptomQuery(pacient.report.symptoms)
         var symptomIDs = new Array()
         await symptomQueries.forEach(async element => {
@@ -74,6 +77,7 @@ class PacientSerializer {
     }
 
     async reportSymptomsQuery(reportID, symptomsID) {
+        console.log("Querying report symptoms")
         var query
         await symptomsID.forEach(async element => {
             query = `INSERT INTO report_symptom (report_ID, symptom_ID) VALUES '${reportID}', '${element}'`
@@ -82,6 +86,7 @@ class PacientSerializer {
     }
 
     async pacientQuery(pacient, user, addressID, reportID) {
+        console.log("Querying pacient")
         const pacientQuery = `INSERT INTO pacients (cpf, name, mother_name, sex, sex_orientation, phone_number, birth_date, address_ID, report_ID, user) VALUES '${pacient.cpf}', '${pacient.name}', '${pacient.mother_name}', '${pacient.sex}', '${pacient.sex_orientation}', '${pacient.phone_number}', '${pacient.birth_date}', '${addressID}', '${reportID}', '${user.username}'`
         await this.client.query(pacientQuery)
     }
