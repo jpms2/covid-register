@@ -17,8 +17,7 @@ CREATE TABLE `addresses` (
     `neighborhood` varchar(255),
     `reference_unit` varchar(255),
     `pacient_ID` varchar(255) NOT NULL,
-    PRIMARY KEY (`address_ID`),
-    FOREIGN KEY (`pacient_ID`) REFERENCES `pacients`(`pacient_ID`)
+    PRIMARY KEY (`address_ID`)
 );
 
 DROP TABLE IF EXISTS `reports`
