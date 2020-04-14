@@ -11,16 +11,16 @@ class PacientSerializer {
         var httpCode = 201
 
         try {
-            await addressQuery().then(addressID => {
+            await addressQuery().then(async addressID => {
                 console.log("Address query OK")
-                await symptomsQuery().then(symptomsID => {
+                await symptomsQuery().then(async symptomsID => {
                     console.log("Symptoms query OK")
-                    await reportQuery(reportID => {
+                    await reportQuery(async reportID => {
                         console.log("Report query OK")
-                        await reportSymptomsQuery(reportID, symptomsID, () => { 
+                        await reportSymptomsQuery(reportID, symptomsID, async () => { 
                             console.log("Report Symptoms query OK")
                         })
-                        await pacientQuery(pacient, user, addressID, reportID, () => {
+                        await pacientQuery(pacient, user, addressID, reportID, async () => {
                             console.log("Pacient query OK")
                             return httpCode
                         })
