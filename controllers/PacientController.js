@@ -8,15 +8,15 @@ class PacientController{
         this.pacientSerializer = new PacientSerializer(mysqlClient)
     }
 
-    async create(user) {
-         const httpCode = await this.pacientSerializer.create(user)
+    async create(user, pacient) {
+         const httpCode = await this.pacientSerializer.create(user.username, pacient)
             var message
             switch (httpCode) {
                 case 500 :
                     message = "Internal error"
                     break;
                 case 409 :
-                    message = "Username is already taken"
+                    message = "This CPF is already registered"
                     break;
                 case 201 :
                     message = "OK"
@@ -24,27 +24,6 @@ class PacientController{
             }
             return {message : message, statusCode: httpCode}
     }
-
-    async authenticate(user) {
-        const httpCode = await this.userSerializer.authenticate(user)
-        var message
-        switch (httpCode) {
-            case 404: 
-                message = "User not found"
-                break
-            case 401:
-                message = "Wrong password"
-                break
-            case 200:
-                message = "OK"
-                break
-            case 500 :
-                message = "Internal error"
-                break;
-        }
-
-        return{message : message, statusCode: httpCode}
-    }
 }
 
-module.exports = UserController
+module.exports = PacientController

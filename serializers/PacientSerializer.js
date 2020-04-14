@@ -81,4 +81,4 @@ class PacientSerializer {
     }
 }
 
-module.exports = UserSerializer
+module.exports = PacientSerializer
