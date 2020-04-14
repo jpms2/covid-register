@@ -26,6 +26,8 @@ class PacientSerializer {
                         })
                     })
                 })
+            }).catch(err => {
+                throw err
             })
         } catch (err) {
             if (err.code && err.errno) {
