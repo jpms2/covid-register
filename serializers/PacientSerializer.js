@@ -9,7 +9,7 @@ class PacientSerializer {
 
     async create(user, pacient) {
         var httpCode = 201
-
+        console.log("Starting to query")
         try {
             await addressQuery().then(async addressID => {
                 console.log("Address query OK")
