@@ -52,7 +52,7 @@ function authenticateToken(req, res, next) {
 }
 
 app.post("/create/pacient", authenticateToken, (req, res) => {
-    userController.create(req.user, req.body.pacient).then(message => {
+    pacientController.create(req.user, req.body.pacient).then(message => {
         res.status(message.statusCode).send(message)
     })
 });

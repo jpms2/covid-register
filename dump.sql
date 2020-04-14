@@ -19,7 +19,7 @@ CREATE TABLE `addresses` (
     PRIMARY KEY (`address_ID`)
 );
 
-DROP TABLE IF EXISTS `reports`
+DROP TABLE IF EXISTS `reports`;
 CREATE TABLE `reports` (
     `report_ID` bigint(20) NOT NULL AUTO_INCREMENT,
     `data_origin` varchar(255),
@@ -32,21 +32,21 @@ CREATE TABLE `reports` (
     PRIMARY KEY (`report_ID`)
 );
 
-DROP TABLE IF EXISTS `symptoms`
+DROP TABLE IF EXISTS `symptoms`;
 CREATE TABLE symptoms (
     symptom_ID INT NOT NULL AUTO_INCREMENT,
     `name` varchar(255),
     PRIMARY KEY (`symptom_ID`)
 );
 
-DROP TABLE IF EXISTS report_symptom
+DROP TABLE IF EXISTS report_symptom;
 CREATE TABLE report_symptoms (
     rs_ID INT NOT NULL AUTO_INCREMENT,
-    report_ID int NOT NULL,
-    symptom_ID int NOT NULL,
+    report_ID bigint(20) NOT NULL,
+    symptom_ID INT NOT NULL,
     PRIMARY KEY (rs_ID),
-    FOREIGN KEY (report_ID) REFERENCES reports(report_ID),
-    FOREIGN KEY (symptom_ID) REFERENCES reports(symptom_ID)
+    FOREIGN KEY (report_ID) REFERENCES `reports`(`report_ID`),
+    FOREIGN KEY (symptom_ID) REFERENCES `symptoms`(`symptom_ID`)
 );
 
 DROP TABLE IF EXISTS `pacients`;
@@ -58,8 +58,8 @@ CREATE TABLE pacients (
     sex_orientation varchar(255),
     phone_number varchar(255),
     birth_date date,
-    address_ID varchar(255),
-    report_ID varchar(255),
+    address_ID int,
+    report_ID int,
     user varchar(255),
     PRIMARY KEY (cpf),
     FOREIGN KEY (address_ID) REFERENCES addresses(address_ID) ON DELETE CASCADE,
