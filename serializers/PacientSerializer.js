@@ -9,7 +9,7 @@ class PacientSerializer {
 
     async create(user, pacient) {
         var httpCode = 201
-    
+
         try {
             const addressID = await addressQuery()
             var symptomIDs = new Array()
@@ -19,7 +19,7 @@ class PacientSerializer {
             const reportID = await reportQuery()
             await reportSymptomsQuery(reportID, symptomIDs)
 
-            await pacientQuery(pacient, addressID, reportID)
+            await pacientQuery(pacient, user, addressID, reportID)
             return httpCode
         } catch (err) {
             if (err.code && err.errno) {
@@ -49,7 +49,7 @@ class PacientSerializer {
     async symptomsQuery() {
         const symptomQueries = symptomQuery(pacient.report.symptoms)
         var symptomIDs = new Array()
-        symptomQueries.forEach(element => {
+        await symptomQueries.forEach(async element => {
             const resultSymptom = await this.client.query(element)
             symptomIDs.push(resultSymptom.insertId)
         })
