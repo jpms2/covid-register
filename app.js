@@ -9,6 +9,7 @@ app.use(cors())
 const jwt = require('jsonwebtoken')
 
 var UserController = require("./controllers/UserController")
+var PacientController = require("./controllers/PacientController")
 var MysqlClient = require("./database/MysqlClient")
 
 var port = process.argv.slice(2)[0];
@@ -20,6 +21,7 @@ if (isNaN(port)) {
 mysqlClient = new MysqlClient();
 mysqlClient.connect()
 userController = new UserController(mysqlClient)
+pacientController = new PacientController(mysqlClient)
 
 app.post("/create/user", (req, res, next) => {
     userController.create(req.body.user).then(message => {
