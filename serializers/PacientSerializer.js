@@ -69,7 +69,7 @@ class PacientSerializer {
 
     async reportSymptomsQuery(reportID, symptomsID) {
         var query
-        symptomsID.forEach(element => {
+        await symptomsID.forEach(async element => {
             query = `INSERT INTO report_symptom (report_ID, symptom_ID) VALUES '${reportID}', '${element}'`
             await this.client.query(query)
         })
