@@ -11,9 +11,9 @@ class PacientSerializer {
         var httpCode = 201
         console.log("Starting to query")
         try {
-            await addressQuery().then(async addressID => {
+            addressQuery().then(async addressID => {
                 console.log("Address query OK")
-                await symptomsQuery().then(async symptomsID => {
+                /*await symptomsQuery().then(async symptomsID => {
                     console.log("Symptoms query OK")
                     await reportQuery(async reportID => {
                         console.log("Report query OK")
@@ -25,7 +25,7 @@ class PacientSerializer {
                             return httpCode
                         })
                     })
-                })
+                })*/
             }).catch(err => {
                 throw err
             })
