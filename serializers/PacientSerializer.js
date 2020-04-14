@@ -11,16 +11,22 @@ class PacientSerializer {
         var httpCode = 201
 
         try {
-            const addressID = await addressQuery()
-            var symptomIDs = new Array()
-            symptomsID = await symptomsQuery()
-
-            
-            const reportID = await reportQuery()
-            await reportSymptomsQuery(reportID, symptomIDs)
-
-            await pacientQuery(pacient, user, addressID, reportID)
-            return httpCode
+            await addressQuery().then(addressID => {
+                console.log("Address query OK")
+                await symptomsQuery().then(symptomsID => {
+                    console.log("Symptoms query OK")
+                    await reportQuery(reportID => {
+                        console.log("Report query OK")
+                        await reportSymptomsQuery(reportID, symptomsID, () => { 
+                            console.log("Report Symptoms query OK")
+                        })
+                        await pacientQuery(pacient, user, addressID, reportID, () => {
+                            console.log("Pacient query OK")
+                            return httpCode
+                        })
+                    })
+                })
+            })
         } catch (err) {
             if (err.code && err.errno) {
                 if (err.code == 'ER_DUP_ENTRY' || err.errno == 1062) {
@@ -37,7 +43,7 @@ class PacientSerializer {
     async addressQuery() {
         const addressQuery = `INSERT INTO addresses (street, number, neighborhood, reference_unit) VALUES ('${pacient.address.street}', '${pacient.address.number}', '${pacient.address.neighborhood}', '${pacient.address.reference_unit}')`
         const resultAddress = await this.client.query(addressQuery)
-            return resultAddress.insertId
+        return resultAddress.insertId
     }
 
     async reportQuery() {
