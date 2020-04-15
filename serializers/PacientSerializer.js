@@ -59,7 +59,7 @@ class PacientSerializer {
 
         console.log("Pacient is: " + JSON.stringify(pacient))
 
-        return 
+        return {status : 200, pacient: pacient}
     }
 
     async verifyPacientExistence(cpf) {
