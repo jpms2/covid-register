@@ -49,7 +49,7 @@ class PacientSerializer {
         const symptomsQuery = `SELECT * FROM report_symptom WHERE report_ID = '${pacient.report_ID}'`
         const symptomIDs = await this.client.query(symptomsQuery)
         for(var element in symptomIDs) {
-            console.log("Symptom id is: " + JSON.stringify(symptomsIDs[element]))
+            console.log("Symptom id is: " + JSON.stringify(symptomIDs[element]))
             var symptomQuery = `SELECT name FROM symptoms WHERE symptom_ID = '${symptomIDs[element]}'`
             const symptom = await this.client.query(symptomQuery)
             console.log("Symptom is: " + JSON.stringify(symptom))
