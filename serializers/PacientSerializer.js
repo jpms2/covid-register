@@ -11,11 +11,11 @@ class PacientSerializer {
         var httpCode = 201
         console.log("Starting to query")
         try {
-            addressID = await this.addressQuery(pacient)
+            const addressID = await this.addressQuery(pacient)
             console.log("Address query OK, id is: " + addressID)
-                /*await symptomsQuery().then(async symptomsID => {
-                    console.log("Symptoms query OK")
-                    await reportQuery(async reportID => {
+            const symptomsIDs = await symptomsQuery(pacient)
+            console.log("Symptoms query OK, id is: " + JSON.stringify(symptomsIDs))
+                    /*await reportQuery(async reportID => {
                         console.log("Report query OK")
                         await reportSymptomsQuery(reportID, symptomsID, async () => { 
                             console.log("Report Symptoms query OK")
@@ -25,7 +25,7 @@ class PacientSerializer {
                             return httpCode
                         })
                     })
-                })*/
+               */
         } catch (err) {
             throw err
             if (err.code && err.errno) {
@@ -44,7 +44,6 @@ class PacientSerializer {
         console.log("Querying address")
         const addressQuery = `INSERT INTO addresses (street, number, neighborhood, reference_unit) VALUES ('${pacient.address.street}', '${pacient.address.number}', '${pacient.address.neighborhood}', '${pacient.address.reference_unit}')`
         const resultAddress = await this.client.query(addressQuery)
-        console.log(JSON.stringify(resultAddress))
         return resultAddress.insertId
     }
 
@@ -55,7 +54,7 @@ class PacientSerializer {
         return resultReport.insertId
     }
 
-    async symptomsQuery() {
+    async symptomsQuery(pacient) {
         console.log("Querying symptoms")
         const symptomQueries = symptomQuery(pacient.report.symptoms)
         var symptomIDs = new Array()
