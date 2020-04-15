@@ -49,13 +49,16 @@ class PacientSerializer {
         const symptomsQuery = `SELECT * FROM report_symptom WHERE report_ID = '${pacient.report_ID}'`
         const symptomIDs = await this.client.query(symptomsQuery)
         for(var element in symptomIDs) {
+            console.log("Symptom id is: " + JSON.stringify(symptomsIDs[element]))
             var symptomQuery = `SELECT name FROM symptoms WHERE symptom_ID = '${symptomIDs[element]}'`
             const symptom = await this.client.query(symptomQuery)
+            console.log("Symptom is: " + JSON.stringify(symptom))
             pacient.report.symptoms.push(symptom[0])
         }
 
-        pacient.report_ID = undefined
-        pacient.address_ID = undefined
+        delete pacient.address.addressID
+        delete pacient.report_ID
+        delete pacient.address_ID
 
         console.log("Pacient is: " + JSON.stringify(pacient))
 
