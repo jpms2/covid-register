@@ -8,6 +8,7 @@ class PacientSerializer {
     }
 
     async create(user, pacient) {
+        console.log("User saving this pacient is: " + JSON.stringify(user))
         var httpCode
         try {
             httpCode = await this.verifyPacientExistence(pacient.cpf)
