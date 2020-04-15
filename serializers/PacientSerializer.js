@@ -11,7 +11,7 @@ class PacientSerializer {
         var httpCode = 201
         console.log("Starting to query")
         try {
-            addressID = await this.addressQuery()
+            addressID = await this.addressQuery(pacient)
             console.log("Address query OK, id is: " + addressID)
                 /*await symptomsQuery().then(async symptomsID => {
                     console.log("Symptoms query OK")
@@ -40,7 +40,7 @@ class PacientSerializer {
         }
     }
 
-    async addressQuery() {
+    async addressQuery(pacient) {
         console.log("Querying address")
         const addressQuery = `INSERT INTO addresses (street, number, neighborhood, reference_unit) VALUES ('${pacient.address.street}', '${pacient.address.number}', '${pacient.address.neighborhood}', '${pacient.address.reference_unit}')`
         const resultAddress = await this.client.query(addressQuery)
