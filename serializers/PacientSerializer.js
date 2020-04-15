@@ -44,6 +44,7 @@ class PacientSerializer {
         console.log("Querying address")
         const addressQuery = `INSERT INTO addresses (street, number, neighborhood, reference_unit) VALUES ('${pacient.address.street}', '${pacient.address.number}', '${pacient.address.neighborhood}', '${pacient.address.reference_unit}')`
         const resultAddress = await this.client.query(addressQuery)
+        console.log(JSON.stringify(resultAddress))
         return resultAddress.insertId
     }
 
