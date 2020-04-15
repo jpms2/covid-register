@@ -74,6 +74,7 @@ class PacientSerializer {
         var tableIDs = []
 
         for(const element in symptomsID) {
+            console.log("Saving report: " + reportID + "and symptom: " + element)
             query = `INSERT INTO report_symptom (report_ID, symptom_ID) VALUES ('${reportID}', '${element}')`
             const id = await this.client.query(query)
             tableIDs.push(id.insertId)
