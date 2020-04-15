@@ -12,28 +12,20 @@ class PacientSerializer {
         try {
             httpCode = await this.verifyPacientExistence(pacient.cpf)
 
+            if (httpCode === 409) {
+                return httpCode
+            }
+
             const addressID = await this.addressQuery(pacient)
-            console.log("Address query OK, id is: " + addressID)
             const symptomsIDs = await this.symptomsQuery(pacient)
-            console.log("Symptoms query OK, id is: " + JSON.stringify(symptomsIDs))
             const reportID = await this.reportQuery(pacient)
-            console.log("Report query OK, id is: " + reportID)
-            const pacientID = await this.pacientQuery(pacient, user, addressID, reportID)
-            console.log("Pacient query OK, id is: " + pacientID)
-            const reportSymptomQuery = await this.reportSymptomsQuery(reportID, symptomsIDs)
-            console.log("Report Symptoms query OK, id is: " + JSON.stringify(reportSymptomQuery))
+            await this.pacientQuery(pacient, user, addressID, reportID)
+            await this.reportSymptomsQuery(reportID, symptomsIDs)
 
             return httpCode
         } catch (err) {
-            if (err.code && err.errno) {
-                if (err.code == 'ER_DUP_ENTRY' || err.errno == 1062) {
-                    httpCode = 409
-                } else {
-                    httpCode = 500
-                }
-            }
-
-            return httpCode
+            console.log(JSON.stringify(err))
+            return 500
         }
     }
 
@@ -41,7 +33,7 @@ class PacientSerializer {
         const verifyQuery = ` SELECT cpf FROM pacients WHERE cpf = '${cpf}'`
         const result = await this.client.query(verifyQuery)
 
-        console.log("pacient select returned: " + JSON.stringify(result))
+        return !result.length ? 201 : 409
     }
 
     async addressQuery(pacient) {
