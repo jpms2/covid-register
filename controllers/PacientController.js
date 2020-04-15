@@ -24,6 +24,11 @@ class PacientController{
             }
             return {message : message, statusCode: httpCode}
     }
+
+    async find(cpf) {
+        const pacient = await this.pacientSerializer.find(cpf)
+        return pacient
+    }
 }
 
 module.exports = PacientController

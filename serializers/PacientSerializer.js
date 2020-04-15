@@ -29,6 +29,12 @@ class PacientSerializer {
         }
     }
 
+    async find(cpf) {
+        const verifyQuery = ` SELECT * FROM pacients WHERE cpf = '${cpf}'`
+        const result = await this.client.query(verifyQuery)
+        console.log("Result is: " + JSON.stringify(result))
+    }
+
     async verifyPacientExistence(cpf) {
         const verifyQuery = ` SELECT cpf FROM pacients WHERE cpf = '${cpf}'`
         const result = await this.client.query(verifyQuery)

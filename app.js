@@ -59,11 +59,12 @@ app.post("/create/pacient", authenticateToken, (req, res) => {
     })
 });
 
-/*
+
 app.get("/pacient/:cpf", (req, res) => {
     res.json(pacientController.find(req.param("cpf")));
 });
 
+/*
 app.post("/pacient/list", (req, res) => {
     list = listBuilder.build(req.body)
     res.json(pacientController.list(list))
