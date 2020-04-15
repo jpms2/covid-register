@@ -17,11 +17,9 @@ class PacientSerializer {
             console.log("Symptoms query OK, id is: " + JSON.stringify(symptomsIDs))
             const reportID = await this.reportQuery(pacient)
             console.log("Report query OK, id is: " + reportID)
-                        /*console.log("Report query OK")
-                        await reportSymptomsQuery(reportID, symptomsID, async () => { 
-                            console.log("Report Symptoms query OK")
-                        })
-                        await pacientQuery(pacient, user, addressID, reportID, async () => {
+            const reportSymptomQuery = await this.reportSymptomsQuery(reportID, symptomsID)
+            console.log("Report Symptoms query OK, id is: " + JSON.stringify(reportSymptomQuery))
+                        /*await pacientQuery(pacient, user, addressID, reportID, async () => {
                             console.log("Pacient query OK")
                             return httpCode
                         })
@@ -78,10 +76,15 @@ class PacientSerializer {
     async reportSymptomsQuery(reportID, symptomsID) {
         console.log("Querying report symptoms")
         var query
-        await symptomsID.forEach(async element => {
+        var tableIDs = []
+
+        for(const element in symptomsID) {
             query = `INSERT INTO report_symptom (report_ID, symptom_ID) VALUES ('${reportID}', '${element}')`
-            await this.client.query(query)
-        })
+            const id = await this.client.query(query)
+            tableIDs.push(id.insertId)
+        }
+
+        return tableIDs
     }
 
     async pacientQuery(pacient, user, addressID, reportID) {
