@@ -57,7 +57,7 @@ class PacientSerializer {
     async symptomsQuery(pacient) {
         console.log("Querying symptoms")
         const symptomQueries = this.symptomQuery(pacient.report.symptoms)
-        var symptomIDs = new Array()
+        var symptomIDs = []
         await symptomQueries.forEach(async element => {
             console.log("Symptom query : " + element)
             const resultSymptom = await this.client.query(element)
@@ -68,7 +68,7 @@ class PacientSerializer {
     }
 
     symptomQuery(symptoms) {
-        var query = new Array()
+        var query = []
 
         symptoms.forEach(element => {
             query.push(`INSERT INTO symptoms (name) VALUES '${element.name}'`)
