@@ -64,7 +64,7 @@ class PacientSerializer {
             symptomIDs.push(resultSymptom.insertId)
         })
 
-        return symptomsIDs
+        return symptomIDs
     }
 
     symptomQuery(symptoms) {
