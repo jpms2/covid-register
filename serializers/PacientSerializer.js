@@ -27,6 +27,7 @@ class PacientSerializer {
                     })
                 })*/
         } catch (err) {
+            console.log(JSON.stringify(err))
             if (err.code && err.errno) {
                 if (err.code == 'ER_DUP_ENTRY' || err.errno == 1062) {
                     httpCode = 409
