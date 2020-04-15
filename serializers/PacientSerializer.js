@@ -59,6 +59,7 @@ class PacientSerializer {
         const symptomQueries = this.symptomQuery(pacient.report.symptoms)
         var symptomIDs = new Array()
         await symptomQueries.forEach(async element => {
+            console.log("Symptom query : " + element)
             const resultSymptom = await this.client.query(element)
             symptomIDs.push(resultSymptom.insertId)
         })
