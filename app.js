@@ -61,9 +61,9 @@ app.post("/create/pacient", authenticateToken, (req, res) => {
 
 
 app.get("/pacient/:cpf", (req, res) => {
-    res.json(pacientController.find(req.param("cpf").then(result => {
+    res.json(pacientController.find(req.param("cpf")).then(result => {
         res.status(result.status).send(result.pacient)
-    })))
+    }))
 });
 
 /*
