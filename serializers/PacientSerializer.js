@@ -41,7 +41,7 @@ class PacientSerializer {
         const verifyQuery = ` SELECT cpf FROM pacients WHERE cpf = '${cpf}'`
         const result = await this.client.query(verifyQuery)
 
-        console.log("pacient select returned: " + result)
+        console.log("pacient select returned: " + JSON.stringify(result))
     }
 
     async addressQuery(pacient) {
