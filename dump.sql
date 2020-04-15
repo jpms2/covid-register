@@ -2,14 +2,19 @@ CREATE DATABASE IF NOT EXISTS covid_records;
 ALTER DATABASE covid_records DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
 USE covid_records;
 
+DROP TABLE IF EXISTS `pacients`;
+DROP TABLE IF EXISTS `report_symptom`;
+DROP TABLE IF EXISTS `symptoms`;
+DROP TABLE IF EXISTS `reports`;
+DROP TABLE IF EXISTS `addresses`;
 DROP TABLE IF EXISTS `users`;
+
 CREATE TABLE `users` (
     `username` varchar(255) NOT NULL,
     `password` varchar(255) NOT NULL,
     PRIMARY KEY (`username`)
 );
 
-DROP TABLE IF EXISTS `addresses`;
 CREATE TABLE `addresses` (
     `address_ID` INT NOT NULL AUTO_INCREMENT,
     `street` varchar(255),
@@ -19,7 +24,7 @@ CREATE TABLE `addresses` (
     PRIMARY KEY (`address_ID`)
 );
 
-DROP TABLE IF EXISTS `reports`;
+
 CREATE TABLE `reports` (
     `report_ID` bigint(20) NOT NULL AUTO_INCREMENT,
     `data_origin` varchar(255),
@@ -32,15 +37,13 @@ CREATE TABLE `reports` (
     PRIMARY KEY (`report_ID`)
 );
 
-DROP TABLE IF EXISTS `symptoms`;
 CREATE TABLE symptoms (
     symptom_ID INT NOT NULL AUTO_INCREMENT,
     `name` varchar(255),
     PRIMARY KEY (`symptom_ID`)
 );
 
-DROP TABLE IF EXISTS report_symptom;
-CREATE TABLE report_symptoms (
+CREATE TABLE report_symptom (
     rs_ID INT NOT NULL AUTO_INCREMENT,
     report_ID bigint(20) NOT NULL,
     symptom_ID INT NOT NULL,
@@ -49,7 +52,6 @@ CREATE TABLE report_symptoms (
     FOREIGN KEY (symptom_ID) REFERENCES `symptoms`(`symptom_ID`)
 );
 
-DROP TABLE IF EXISTS `pacients`;
 CREATE TABLE pacients (
     cpf varchar(255) NOT NULL,
     name varchar(255) NOT NULL,
@@ -59,7 +61,7 @@ CREATE TABLE pacients (
     phone_number varchar(255),
     birth_date date,
     address_ID int,
-    report_ID int,
+    report_ID bigint(20),
     user varchar(255),
     PRIMARY KEY (cpf),
     FOREIGN KEY (address_ID) REFERENCES addresses(address_ID) ON DELETE CASCADE,
