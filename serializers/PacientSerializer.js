@@ -11,8 +11,8 @@ class PacientSerializer {
         var httpCode = 201
         console.log("Starting to query")
         try {
-            addressQuery().then(async addressID => {
-                console.log("Address query OK")
+            addressID = await addressQuery()
+            console.log("Address query OK, id is: " + addressID)
                 /*await symptomsQuery().then(async symptomsID => {
                     console.log("Symptoms query OK")
                     await reportQuery(async reportID => {
@@ -26,9 +26,6 @@ class PacientSerializer {
                         })
                     })
                 })*/
-            }).catch(err => {
-                throw err
-            })
         } catch (err) {
             if (err.code && err.errno) {
                 if (err.code == 'ER_DUP_ENTRY' || err.errno == 1062) {
