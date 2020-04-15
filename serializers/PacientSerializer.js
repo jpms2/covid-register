@@ -49,7 +49,7 @@ class PacientSerializer {
 
     async reportQuery() {
         console.log("Querying report")
-        const reportQuery = `INSERT INTO reports (data_origin, comorbidity, covid_exam, covid_result, situation, notification_date, symptoms_start_date) VALUES '${pacient.report.data_origin}', '${pacient.report.comorbidity}', '${pacient.report.covid_exam}', '${pacient.report.covid_result}', '${pacient.report.situation}', '${pacient.report.notification_date}', '${pacient.report.symptoms_start_date}'`
+        const reportQuery = `INSERT INTO reports (data_origin, comorbidity, covid_exam, covid_result, situation, notification_date, symptoms_start_date) VALUES ('${pacient.report.data_origin}', '${pacient.report.comorbidity}', '${pacient.report.covid_exam}', '${pacient.report.covid_result}', '${pacient.report.situation}', '${pacient.report.notification_date}', '${pacient.report.symptoms_start_date}')`
         const resultReport = await this.client.query(reportQuery)
         return resultReport.insertId
     }
@@ -71,7 +71,7 @@ class PacientSerializer {
         var query = []
 
         symptoms.forEach(element => {
-            query.push(`INSERT INTO symptoms (name) VALUES '${element.name}'`)
+            query.push(`INSERT INTO symptoms (name) VALUES ('${element.name}')`)
         });
 
         return query
@@ -81,7 +81,7 @@ class PacientSerializer {
         console.log("Querying report symptoms")
         var query
         await symptomsID.forEach(async element => {
-            query = `INSERT INTO report_symptom (report_ID, symptom_ID) VALUES '${reportID}', '${element}'`
+            query = `INSERT INTO report_symptom (report_ID, symptom_ID) VALUES ('${reportID}', '${element}')`
             await this.client.query(query)
         })
     }
