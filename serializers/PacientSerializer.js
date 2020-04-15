@@ -15,8 +15,9 @@ class PacientSerializer {
             console.log("Address query OK, id is: " + addressID)
             const symptomsIDs = await this.symptomsQuery(pacient)
             console.log("Symptoms query OK, id is: " + JSON.stringify(symptomsIDs))
-                    /*await reportQuery(async reportID => {
-                        console.log("Report query OK")
+            const reportID = await reportQuery(pacient)
+            console.log("Report query OK, id is: " + reportID)
+                        /*console.log("Report query OK")
                         await reportSymptomsQuery(reportID, symptomsID, async () => { 
                             console.log("Report Symptoms query OK")
                         })
@@ -41,28 +42,23 @@ class PacientSerializer {
     }
 
     async addressQuery(pacient) {
-        console.log("Querying address")
         const addressQuery = `INSERT INTO addresses (street, number, neighborhood, reference_unit) VALUES ('${pacient.address.street}', '${pacient.address.number}', '${pacient.address.neighborhood}', '${pacient.address.reference_unit}')`
         const resultAddress = await this.client.query(addressQuery)
         return resultAddress.insertId
     }
 
-    async reportQuery() {
-        console.log("Querying report")
+    async reportQuery(pacient) {
         const reportQuery = `INSERT INTO reports (data_origin, comorbidity, covid_exam, covid_result, situation, notification_date, symptoms_start_date) VALUES ('${pacient.report.data_origin}', '${pacient.report.comorbidity}', '${pacient.report.covid_exam}', '${pacient.report.covid_result}', '${pacient.report.situation}', '${pacient.report.notification_date}', '${pacient.report.symptoms_start_date}')`
         const resultReport = await this.client.query(reportQuery)
         return resultReport.insertId
     }
 
     async symptomsQuery(pacient) {
-        console.log("Querying symptoms")
         const symptomQueries = this.symptomQuery(pacient.report.symptoms)
         var symptomIDs = []
         
         for(const element of symptomQueries) {
-            console.log("Symptom query : " + element)
             const resultSymptom = await this.client.query(element)
-            console.log("Symptom query result: " + resultSymptom.insertId)
             symptomIDs.push(resultSymptom.insertId)
         }
 
