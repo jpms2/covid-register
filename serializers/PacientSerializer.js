@@ -13,7 +13,7 @@ class PacientSerializer {
         try {
             const addressID = await this.addressQuery(pacient)
             console.log("Address query OK, id is: " + addressID)
-            const symptomsIDs = await symptomsQuery(pacient)
+            const symptomsIDs = await this.symptomsQuery(pacient)
             console.log("Symptoms query OK, id is: " + JSON.stringify(symptomsIDs))
                     /*await reportQuery(async reportID => {
                         console.log("Report query OK")
