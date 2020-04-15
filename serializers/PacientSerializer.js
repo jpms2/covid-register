@@ -8,9 +8,10 @@ class PacientSerializer {
     }
 
     async create(user, pacient) {
-        var httpCode = 201
-        console.log("Starting to query")
+        var httpCode
         try {
+            httpCode = await this.verifyPacientExistence(pacient.cpf)
+
             const addressID = await this.addressQuery(pacient)
             console.log("Address query OK, id is: " + addressID)
             const symptomsIDs = await this.symptomsQuery(pacient)
@@ -21,8 +22,9 @@ class PacientSerializer {
             console.log("Pacient query OK, id is: " + pacientID)
             const reportSymptomQuery = await this.reportSymptomsQuery(reportID, symptomsIDs)
             console.log("Report Symptoms query OK, id is: " + JSON.stringify(reportSymptomQuery))
+
+            return httpCode
         } catch (err) {
-            throw err
             if (err.code && err.errno) {
                 if (err.code == 'ER_DUP_ENTRY' || err.errno == 1062) {
                     httpCode = 409
@@ -33,6 +35,13 @@ class PacientSerializer {
 
             return httpCode
         }
+    }
+
+    async verifyPacientExistence(cpf) {
+        const verifyQuery = ` SELECT cpf FROM pacients WHERE cpf = '${cpf}'`
+        const result = await this.client.query(verifyQuery)
+
+        console.log("pacient select returned: " + result)
     }
 
     async addressQuery(pacient) {
@@ -73,9 +82,7 @@ class PacientSerializer {
         var query
         var tableIDs = []
 
-        console.log(JSON.stringify(symptomsID))
         for(var element in symptomsID) {
-            console.log("Saving report: " + reportID + " and symptom: " + symptomsID[element])
             query = `INSERT INTO report_symptom (report_ID, symptom_ID) VALUES ('${reportID}', '${symptomsID[element]}')`
             const id = await this.client.query(query)
             tableIDs.push(id.insertId)
