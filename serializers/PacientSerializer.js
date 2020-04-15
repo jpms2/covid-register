@@ -21,11 +21,11 @@ class PacientSerializer {
             const reportID = await this.reportQuery(pacient)
             await this.pacientQuery(pacient, user, addressID, reportID)
             await this.reportSymptomsQuery(reportID, symptomsIDs)
+            console.log("A new pacient has been recorded")
 
             return httpCode
         } catch (err) {
-            console.log(JSON.stringify(err))
-            return 500
+            throw err
         }
     }
 
@@ -49,10 +49,8 @@ class PacientSerializer {
         const symptomsQuery = `SELECT symptom_ID FROM report_symptom WHERE report_ID = '${pacient.report_ID}'`
         const symptomIDs = await this.client.query(symptomsQuery)
         for(var element in symptomIDs) {
-            console.log("Symptom id is: " + JSON.stringify(symptomIDs[element].symptom_ID))
             var symptomQuery = `SELECT name FROM symptoms WHERE symptom_ID = '${symptomIDs[element].symptom_ID}'`
             const symptom = await this.client.query(symptomQuery)
-            console.log("Symptom is: " + JSON.stringify(symptom))
             pacient.report.symptoms.push(symptom[0])
         }
 
@@ -60,8 +58,6 @@ class PacientSerializer {
         delete pacient.report_ID
         delete pacient.address_ID
         pacient.report.covid_exam = pacient.report.covid_exam === 1
-
-        console.log("Pacient is: " + JSON.stringify(pacient))
 
         return {status : 200, pacient: pacient}
     }
