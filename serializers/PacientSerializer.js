@@ -59,6 +59,7 @@ class PacientSerializer {
         delete pacient.address.addressID
         delete pacient.report_ID
         delete pacient.address_ID
+        pacient.report.covid_exam = pacient.report.covid_exam === 1
 
         console.log("Pacient is: " + JSON.stringify(pacient))
 
@@ -79,7 +80,7 @@ class PacientSerializer {
     }
 
     async reportQuery(pacient) {
-        const reportQuery = `INSERT INTO reports (data_origin, comorbidity, covid_exam, covid_result, situation, notification_date, symptoms_start_date) VALUES ('${pacient.report.data_origin}', '${pacient.report.comorbidity}', '${pacient.report.covid_exam}', '${pacient.report.covid_result}', '${pacient.report.situation}', '${pacient.report.notification_date}', '${pacient.report.symptoms_start_date}')`
+        const reportQuery = `INSERT INTO reports (data_origin, comorbidity, covid_exam, covid_result, situation, notification_date, symptoms_start_date) VALUES ('${pacient.report.data_origin}', '${pacient.report.comorbidity}', '${pacient.report.covid_exam === true ? 1 : 0}', '${pacient.report.covid_result}', '${pacient.report.situation}', '${pacient.report.notification_date}', '${pacient.report.symptoms_start_date}')`
         const resultReport = await this.client.query(reportQuery)
         return resultReport.insertId
     }
