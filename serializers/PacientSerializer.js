@@ -32,7 +32,34 @@ class PacientSerializer {
     async find(cpf) {
         const verifyQuery = ` SELECT * FROM pacients WHERE cpf = '${cpf}'`
         const result = await this.client.query(verifyQuery)
-        console.log("Result is: " + JSON.stringify(result))
+        if (!result.length) return {status: 409}
+        var pacient = result[0]
+
+        const addressQuery = `SELECT * FROM addresses WHERE address_ID = '${pacient.address_ID}'`
+        const address = await this.client.query(addressQuery)
+        if (!address.length) return {status: 500}
+        pacient.address = address[0]
+
+        const reportsQuery = `SELECT * FROM reports WHERE report_ID = '${pacient.report_ID}'`
+        const reports = await this.client.query(reportsQuery)
+        if (!reports.length) return {status: 500}
+        pacient.report = reports[0]
+
+        pacient.report.symptoms = []
+        const symptomsQuery = `SELECT * FROM report_symptom WHERE report_ID = '${pacient.report_ID}'`
+        const symptomIDs = await this.client.query(symptomsQuery)
+        for(var element in symptomIDs) {
+            var symptomQuery = `SELECT name FROM symptoms WHERE symptom_ID = ${symptomIDs[element]}`
+            const symptom = await this.client.query(symptomQuery)
+            pacient.report.symptoms.push(symptom[0])
+        }
+
+        pacient.report_ID = undefined
+        pacient.address_ID = undefined
+
+        console.log("Pacient is: " + JSON.stringify(pacient))
+
+        return 
     }
 
     async verifyPacientExistence(cpf) {
@@ -59,7 +86,7 @@ class PacientSerializer {
         var symptomIDs = []
         
         for(var element of symptomQueries) {
-            const resultSymptom = await this.client.query(element)
+            const resultSymptom = await this.client.query(symptoms[element])
             symptomIDs.push(resultSymptom.insertId)
         }
 
