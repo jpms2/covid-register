@@ -17,14 +17,10 @@ class PacientSerializer {
             console.log("Symptoms query OK, id is: " + JSON.stringify(symptomsIDs))
             const reportID = await this.reportQuery(pacient)
             console.log("Report query OK, id is: " + reportID)
+            const pacientID = await this.pacientQuery(pacient, user, addressID, reportID)
+            console.log("Pacient query OK, id is: " + pacientID)
             const reportSymptomQuery = await this.reportSymptomsQuery(reportID, symptomsIDs)
             console.log("Report Symptoms query OK, id is: " + JSON.stringify(reportSymptomQuery))
-                        /*await pacientQuery(pacient, user, addressID, reportID, async () => {
-                            console.log("Pacient query OK")
-                            return httpCode
-                        })
-                    })
-               */
         } catch (err) {
             throw err
             if (err.code && err.errno) {
@@ -74,7 +70,6 @@ class PacientSerializer {
     }
 
     async reportSymptomsQuery(reportID, symptomsID) {
-        console.log("Querying report symptoms")
         var query
         var tableIDs = []
 
@@ -88,9 +83,10 @@ class PacientSerializer {
     }
 
     async pacientQuery(pacient, user, addressID, reportID) {
-        console.log("Querying pacient")
         const pacientQuery = `INSERT INTO pacients (cpf, name, mother_name, sex, sex_orientation, phone_number, birth_date, address_ID, report_ID, user) VALUES '${pacient.cpf}', '${pacient.name}', '${pacient.mother_name}', '${pacient.sex}', '${pacient.sex_orientation}', '${pacient.phone_number}', '${pacient.birth_date}', '${addressID}', '${reportID}', '${user.username}'`
-        await this.client.query(pacientQuery)
+        const result = await this.client.query(pacientQuery)
+        
+        return result.insertId
     }
 }
 
