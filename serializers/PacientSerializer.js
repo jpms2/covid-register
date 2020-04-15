@@ -25,7 +25,8 @@ class PacientSerializer {
 
             return httpCode
         } catch (err) {
-            throw err
+            console.log ('error', err.message, err.stack)
+            return 500
         }
     }
 
@@ -86,7 +87,7 @@ class PacientSerializer {
         var symptomIDs = []
         
         for(var element of symptomQueries) {
-            const resultSymptom = await this.client.query(symptoms[element])
+            const resultSymptom = await this.client.query(symptomQueries[element])
             symptomIDs.push(resultSymptom.insertId)
         }
 
