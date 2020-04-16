@@ -59,6 +59,12 @@ app.post("/create/pacient", authenticateToken, (req, res) => {
     })
 });
 
+app.put("/create/pacient", authenticateToken, (req, res) => {
+    pacientController.update(req.body.pacient).then(message => {
+        res.status(message.statusCode).send(message)
+    })
+});
+
 
 app.get("/pacient/:cpf", authenticateToken, (req, res) => {
     pacientController.find(req.param("cpf")).then(result => {

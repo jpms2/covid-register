@@ -30,6 +30,64 @@ class PacientSerializer {
         }
     }
 
+    async update(pacient) {
+        if (!pacient.cpf) return 409
+        try {
+            if (pacient.name) await this.updatePacient(pacient.cpf, "name", pacient.name)
+            if (pacient.mother_name) await this.updatePacient(pacient.cpf, "mother_name", pacient.mother_name)
+            if (pacient.sex) await this.updatePacient(pacient.cpf, "sex", pacient.sex)
+            if (pacient.sex_orientation) await this.updatePacient(pacient.cpf, "sex_orientation", pacient.sex_orientation)
+            if (pacient.phone_number) await this.updatePacient(pacient.cpf, "phone_number", pacient.phone_number)
+            if (pacient.birth_date) await this.updatePacient(pacient.cpf, "birth_date", pacient.birth_date)
+
+            if (pacient.address) {
+                addressIDQuery = `SELECT address_ID FROM pacients WHERE cpf = ${pacient.cpf}`
+                const address_ID = await this.mysqlClient.query(addressIDQuery)
+                if (pacient.address.street) await this.updateAddress(address_ID, "street", pacient.address.street)
+                if (pacient.address.number) await this.updateAddress(address_ID, "number", pacient.address.number)
+                if (pacient.address.neighborhood) await this.updateAddress(address_ID, "neighborhood", pacient.address.neighborhood)
+                if (pacient.address.reference_unit) await this.updateAddress(address_ID, "reference_unit", pacient.address.reference_unit)
+            }
+
+            if (pacient.report) {
+                reportIDQuery = `SELECT report_ID FROM pacients WHERE cpf = ${pacient.cpf}`
+                const report_ID = await this.mysqlClient.query(reportIDQuery)
+                if (pacient.report.data_origin) await this.updateReport(report_ID, "data_origin", pacient.address.data_origin)
+                if (pacient.report.comorbidity) await this.updateReport(report_ID, "comorbidity", pacient.address.comorbidity)
+                if (pacient.report.covid_exam) await this.updateReport(report_ID, "covid_exam", pacient.address.covid_exam)
+                if (pacient.report.covid_result) await this.updateReport(report_ID, "covid_result", pacient.address.covid_result)
+                if (pacient.report.situation) await this.updateReport(report_ID, "situation", pacient.address.situation)
+                if (pacient.report.notification_date) await this.updateReport(report_ID, "notification_date", pacient.address.notification_date)
+                if (pacient.report.symptoms_start_date) await this.updateReport(report_ID, "symptoms_start_date", pacient.address.symptoms_start_date)
+            
+                if(pacient.report.symptoms) {
+                    const symptomsIDs = await this.symptomsQuery(pacient)
+                    await this.reportSymptomsQuery(report_ID, symptomsIDs)
+                }
+            }
+        } catch(err) {
+            console.log ('error', err.message, err.stack)
+            return 500
+        }
+
+        return 201
+    }
+
+    updatePacient(cpf, columnName, value) {
+        const query = `UPDATE pacients SET ${columnName} = ${value} WHERE cpf = ${cpf} `
+        await this.mysqlClient.query(query)
+    }
+
+    updateAddress(addressID, columnName, value) {
+        const query = `UPDATE addresses SET ${columnName} = ${value} WHERE address_ID = ${addressID}`
+        await this.mysqlClient.query(query)
+    }
+
+    updateReport(report_ID, columnName, value) {
+        const query = `UPDATE reports SET ${columnName} = ${value} WHERE report_ID = ${report_ID}`
+        await this.mysqlClient.query(query)
+    }
+
     async find(cpf) {
         const verifyQuery = ` SELECT * FROM pacients WHERE cpf = '${cpf}'`
         const result = await this.client.query(verifyQuery)
