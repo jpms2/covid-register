@@ -66,12 +66,11 @@ app.get("/pacient/:cpf", (req, res) => {
     })
 });
 
-/*
 app.post("/pacient/list", (req, res) => {
-    list = listBuilder.build(req.body)
-    res.json(pacientController.list(list))
+    pacientController.list(req.list).then(pacients => {
+        res.send(pacients)
+    })
 });
-*/
 
 app.listen(port, () => {
  console.log("Server running on port " + port);

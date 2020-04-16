@@ -29,6 +29,11 @@ class PacientController{
         const pacient = await this.pacientSerializer.find(cpf)
         return pacient
     }
+
+    async list(list) {
+        const pacients = await this.pacientSerializer.list(list)
+        return pacients
+    }
 }
 
 module.exports = PacientController

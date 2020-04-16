@@ -63,6 +63,40 @@ class PacientSerializer {
         return {status : 200, pacient: pacient}
     }
 
+    async list(list) {
+        const totalPacientsQuery = `SELECT COUNT(cpf) FROM pacients`
+        const totalPacients = this.client.query(totalPacientsQuery)
+        const offset = list.page_size * (list.page_index - 1)
+        var listQuery = `SELECT pac.cpf, pac.name, addr.reference_unit, rep.notification_date FROM pacients AS pac INNER JOIN addresses AS addr ON pac.address_ID = addr.address_ID INNER JOIN reports AS rep ON pac.report_ID = rep.report_ID`
+        
+        if (list.order_by) {
+            var orderBy
+            switch (list.order_by) {
+                case "cpf":
+                    orderBy = "pac." + list.order_by
+                    break
+                case "name":
+                    orderBy = "pac." + list.order_by
+                    break
+                case "reference_unit":
+                    orderBy = "addr." + list.order_by
+                    break
+                case "notification_date":
+                    orderBy = "notification_date." + list.order_by
+                    break;
+                default:
+                    console.log("No implementation for this ordenation")
+                    break;
+            }
+            listQuery = listQuery + ` ORDER BY ${list.order_by}`
+        }
+
+        listQuery = listQuery + ` LIMIT ${list.page_size} OFFSET ${offset}`
+        const result = await this.client.query(listQuery)
+
+        return {total_pacients: totalPacients[0], pacients: result}
+    }
+
     async verifyPacientExistence(cpf) {
         const verifyQuery = ` SELECT cpf FROM pacients WHERE cpf = '${cpf}'`
         const result = await this.client.query(verifyQuery)
