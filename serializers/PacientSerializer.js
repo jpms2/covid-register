@@ -66,7 +66,7 @@ class PacientSerializer {
     async list(list) {
         const totalPacientsQuery = `SELECT COUNT(cpf) FROM pacients`
         const totalPacients = this.client.query(totalPacientsQuery)
-        console.log(JSON.stringify(list))
+        console.log(JSON.stringify(totalPacients))
         const offset = list.page_size * (list.page_index - 1)
         var listQuery = `SELECT pac.cpf, pac.name, addr.reference_unit, rep.notification_date FROM pacients AS pac INNER JOIN addresses AS addr ON pac.address_ID = addr.address_ID INNER JOIN reports AS rep ON pac.report_ID = rep.report_ID`
         
