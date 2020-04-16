@@ -45,8 +45,9 @@ class PacientSerializer {
                 const addressIDQuery = `SELECT address_ID FROM pacients WHERE cpf = '${pacient.cpf}'`
                 console.log("Updating addresses")
                 console.log("Update query: " + addressIDQuery)
-                const address_ID = await this.client.query(addressIDQuery)
-                console.log
+                const address_ID_result = await this.client.query(addressIDQuery)
+                console.log(JSON.stringify(report_ID_result))
+                const address_ID = address_ID_result[0]
                 if (pacient.address.street) await this.updateAddress(address_ID, "street", pacient.address.street)
                 if (pacient.address.number) await this.updateAddress(address_ID, "number", pacient.address.number)
                 if (pacient.address.neighborhood) await this.updateAddress(address_ID, "neighborhood", pacient.address.neighborhood)
@@ -57,7 +58,9 @@ class PacientSerializer {
                 const reportIDQuery = `SELECT report_ID FROM pacients WHERE cpf = '${pacient.cpf}'`
                 console.log("Updating reports")
                 console.log("Update query: " + reportIDQuery)
-                const report_ID = await this.client.query(reportIDQuery)
+                const report_ID_result = await this.client.query(reportIDQuery)
+                console.log(JSON.stringify(report_ID_result))
+                const report_ID = report_ID_result[0]
                 if (pacient.report.data_origin) await this.updateReport(report_ID, "data_origin", pacient.address.data_origin)
                 if (pacient.report.comorbidity) await this.updateReport(report_ID, "comorbidity", pacient.address.comorbidity)
                 if (pacient.report.covid_exam) await this.updateReport(report_ID, "covid_exam", pacient.address.covid_exam)
