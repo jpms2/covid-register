@@ -43,10 +43,7 @@ class PacientSerializer {
 
             if (pacient.address) {
                 const addressIDQuery = `SELECT address_ID AS value FROM pacients WHERE cpf = '${pacient.cpf}'`
-                console.log("Updating addresses")
-                console.log("Update query: " + addressIDQuery)
                 const address_ID_result = await this.client.query(addressIDQuery)
-                console.log(JSON.stringify(address_ID_result[0].value))
                 const address_ID = address_ID_result[0].value
                 if (pacient.address.street) await this.updateAddress(address_ID, "street", pacient.address.street)
                 if (pacient.address.number) await this.updateAddress(address_ID, "number", pacient.address.number)
@@ -56,18 +53,15 @@ class PacientSerializer {
 
             if (pacient.report) {
                 const reportIDQuery = `SELECT report_ID AS value FROM pacients WHERE cpf = '${pacient.cpf}'`
-                console.log("Updating reports")
-                console.log("Update query: " + reportIDQuery)
                 const report_ID_result = await this.client.query(reportIDQuery)
-                console.log(JSON.stringify(report_ID_result[0].value))
                 const report_ID = report_ID_result[0].value
-                if (pacient.report.data_origin) await this.updateReport(report_ID, "data_origin", pacient.address.data_origin)
-                if (pacient.report.comorbidity) await this.updateReport(report_ID, "comorbidity", pacient.address.comorbidity)
-                if (pacient.report.covid_exam) await this.updateReport(report_ID, "covid_exam", pacient.address.covid_exam)
-                if (pacient.report.covid_result) await this.updateReport(report_ID, "covid_result", pacient.address.covid_result)
-                if (pacient.report.situation) await this.updateReport(report_ID, "situation", pacient.address.situation)
-                if (pacient.report.notification_date) await this.updateReport(report_ID, "notification_date", pacient.address.notification_date)
-                if (pacient.report.symptoms_start_date) await this.updateReport(report_ID, "symptoms_start_date", pacient.address.symptoms_start_date)
+                if (pacient.report.data_origin) await this.updateReport(report_ID, "data_origin", pacient.report.data_origin)
+                if (pacient.report.comorbidity) await this.updateReport(report_ID, "comorbidity", pacient.report.comorbidity)
+                if (pacient.report.covid_exam) await this.updateReport(report_ID, "covid_exam", pacient.report.covid_exam)
+                if (pacient.report.covid_result) await this.updateReport(report_ID, "covid_result", pacient.report.covid_result)
+                if (pacient.report.situation) await this.updateReport(report_ID, "situation", pacient.report.situation)
+                if (pacient.report.notification_date) await this.updateReport(report_ID, "notification_date", pacient.report.notification_date)
+                if (pacient.report.symptoms_start_date) await this.updateReport(report_ID, "symptoms_start_date", pacient.report.symptoms_start_date)
             
                 if(pacient.report.symptoms) {
                     const symptomsIDs = await this.symptomsQuery(pacient)
