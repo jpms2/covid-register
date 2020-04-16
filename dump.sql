@@ -47,9 +47,7 @@ CREATE TABLE report_symptom (
     rs_ID INT NOT NULL AUTO_INCREMENT,
     report_ID bigint(20) NOT NULL,
     symptom_ID INT NOT NULL,
-    PRIMARY KEY (rs_ID),
-    FOREIGN KEY (report_ID) REFERENCES `reports`(`report_ID`),
-    FOREIGN KEY (symptom_ID) REFERENCES `symptoms`(`symptom_ID`)
+    PRIMARY KEY (rs_ID)
 );
 
 CREATE TABLE pacients (
@@ -63,9 +61,7 @@ CREATE TABLE pacients (
     address_ID int,
     report_ID bigint(20),
     user varchar(255),
-    PRIMARY KEY (cpf),
-    FOREIGN KEY (address_ID) REFERENCES addresses(address_ID) ON DELETE CASCADE,
-    FOREIGN KEY (report_ID) REFERENCES reports(report_ID)
+    PRIMARY KEY (cpf)
 );
 
 CREATE USER IF NOT EXISTS 'covid'@'%' identified BY 'Covid.123';
