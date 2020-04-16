@@ -60,13 +60,13 @@ app.post("/create/pacient", authenticateToken, (req, res) => {
 });
 
 
-app.get("/pacient/:cpf", (req, res) => {
+app.get("/pacient/:cpf", authenticateToken, (req, res) => {
     pacientController.find(req.param("cpf")).then(result => {
         res.status(result.status).send(result.pacient)
     })
 });
 
-app.post("/pacient/list", (req, res) => {
+app.post("/pacient/list", authenticateToken, (req, res) => {
     pacientController.list(req.body.list).then(pacients => {
         res.send(pacients)
     })
