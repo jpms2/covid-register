@@ -26,7 +26,7 @@ class PacientController{
     }
 
     async update(pacient) {
-        const httpCode = await this.pacientSerializer.create(pacient)
+        const httpCode = await this.pacientSerializer.update(pacient)
         switch (httpCode) {
             case 500 :
                 message = "Internal error"
