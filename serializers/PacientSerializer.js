@@ -31,6 +31,7 @@ class PacientSerializer {
     }
 
     async update(pacient) {
+        console.log(JSON.stringify(pacient))
         if (!pacient.cpf) return 409
         try {
             if (pacient.name) await this.updatePacient(pacient.cpf, "name", pacient.name)
@@ -42,6 +43,8 @@ class PacientSerializer {
 
             if (pacient.address) {
                 const addressIDQuery = `SELECT address_ID FROM pacients WHERE cpf = '${pacient.cpf}'`
+                console.log("Updating addresses")
+                console.log("Update query: " + addressIDQuery)
                 const address_ID = await this.client.query(addressIDQuery)
                 if (pacient.address.street) await this.updateAddress(address_ID, "street", pacient.address.street)
                 if (pacient.address.number) await this.updateAddress(address_ID, "number", pacient.address.number)
@@ -51,6 +54,8 @@ class PacientSerializer {
 
             if (pacient.report) {
                 const reportIDQuery = `SELECT report_ID FROM pacients WHERE cpf = '${pacient.cpf}'`
+                console.log("Updating reports")
+                console.log("Update query: " + addressIDQuery)
                 const report_ID = await this.client.query(reportIDQuery)
                 if (pacient.report.data_origin) await this.updateReport(report_ID, "data_origin", pacient.address.data_origin)
                 if (pacient.report.comorbidity) await this.updateReport(report_ID, "comorbidity", pacient.address.comorbidity)
@@ -62,6 +67,8 @@ class PacientSerializer {
             
                 if(pacient.report.symptoms) {
                     const symptomsIDs = await this.symptomsQuery(pacient)
+                    console.log("Updating symptoms")
+                    console.log("Update query: " + addressIDQuery) 
                     await this.reportSymptomsQuery(report_ID, symptomsIDs)
                 }
             }
@@ -70,6 +77,7 @@ class PacientSerializer {
             return 500
         }
 
+        console.log("A pacient has been updated")
         return 201
     }
 
