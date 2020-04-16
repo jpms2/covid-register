@@ -67,7 +67,7 @@ app.get("/pacient/:cpf", (req, res) => {
 });
 
 app.post("/pacient/list", (req, res) => {
-    pacientController.list(req.list).then(pacients => {
+    pacientController.list(req.body.list).then(pacients => {
         res.send(pacients)
     })
 });
