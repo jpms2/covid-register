@@ -74,19 +74,19 @@ class PacientSerializer {
     }
 
     async updatePacient(cpf, columnName, value) {
-        const query = `UPDATE pacients SET ${columnName} = ${value} WHERE cpf = ${cpf} `
+        const query = `UPDATE pacients SET ${columnName}=${value} WHERE cpf=${cpf} `
         console.log(query)
         await this.client.query(query)
     }
 
     async updateAddress(addressID, columnName, value) {
-        const query = `UPDATE addresses SET ${columnName} = ${value} WHERE address_ID = ${addressID}`
+        const query = `UPDATE addresses SET ${columnName}=${value} WHERE address_ID=${addressID}`
         console.log(query)
         await this.client.query(query)
     }
 
     async updateReport(report_ID, columnName, value) {
-        const query = `UPDATE reports SET ${columnName} = ${value} WHERE report_ID = ${report_ID}`
+        const query = `UPDATE reports SET ${columnName}=${value} WHERE report_ID=${report_ID}`
         console.log(query)
         await this.client.query(query)
     }
