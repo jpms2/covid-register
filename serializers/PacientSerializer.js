@@ -46,7 +46,7 @@ class PacientSerializer {
                 console.log("Updating addresses")
                 console.log("Update query: " + addressIDQuery)
                 const address_ID_result = await this.client.query(addressIDQuery)
-                console.log(JSON.stringify(report_ID_result))
+                console.log(JSON.stringify(address_ID_result))
                 const address_ID = address_ID_result[0]
                 if (pacient.address.street) await this.updateAddress(address_ID, "street", pacient.address.street)
                 if (pacient.address.number) await this.updateAddress(address_ID, "number", pacient.address.number)
