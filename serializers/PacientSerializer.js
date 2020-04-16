@@ -31,7 +31,6 @@ class PacientSerializer {
     }
 
     async update(pacient) {
-        console.log(JSON.stringify(pacient))
         if (!pacient.cpf) return 409
         try {
             if (pacient.name) await this.updatePacient(pacient.cpf, "name", pacient.name)
