@@ -42,7 +42,7 @@ class PacientSerializer {
 
             if (pacient.address) {
                 addressIDQuery = `SELECT address_ID FROM pacients WHERE cpf = ${pacient.cpf}`
-                const address_ID = await this.mysqlClient.query(addressIDQuery)
+                const address_ID = await this.client.query(addressIDQuery)
                 if (pacient.address.street) await this.updateAddress(address_ID, "street", pacient.address.street)
                 if (pacient.address.number) await this.updateAddress(address_ID, "number", pacient.address.number)
                 if (pacient.address.neighborhood) await this.updateAddress(address_ID, "neighborhood", pacient.address.neighborhood)
@@ -51,7 +51,7 @@ class PacientSerializer {
 
             if (pacient.report) {
                 reportIDQuery = `SELECT report_ID FROM pacients WHERE cpf = ${pacient.cpf}`
-                const report_ID = await this.mysqlClient.query(reportIDQuery)
+                const report_ID = await this.client.query(reportIDQuery)
                 if (pacient.report.data_origin) await this.updateReport(report_ID, "data_origin", pacient.address.data_origin)
                 if (pacient.report.comorbidity) await this.updateReport(report_ID, "comorbidity", pacient.address.comorbidity)
                 if (pacient.report.covid_exam) await this.updateReport(report_ID, "covid_exam", pacient.address.covid_exam)
@@ -75,17 +75,17 @@ class PacientSerializer {
 
     async updatePacient(cpf, columnName, value) {
         const query = `UPDATE pacients SET ${columnName} = ${value} WHERE cpf = ${cpf} `
-        await this.mysqlClient.query(query)
+        await this.client.query(query)
     }
 
     async updateAddress(addressID, columnName, value) {
         const query = `UPDATE addresses SET ${columnName} = ${value} WHERE address_ID = ${addressID}`
-        await this.mysqlClient.query(query)
+        await this.client.query(query)
     }
 
     async updateReport(report_ID, columnName, value) {
         const query = `UPDATE reports SET ${columnName} = ${value} WHERE report_ID = ${report_ID}`
-        await this.mysqlClient.query(query)
+        await this.client.query(query)
     }
 
     async find(cpf) {
