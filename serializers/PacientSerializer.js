@@ -15,7 +15,7 @@ class PacientSerializer {
             if (httpCode === 409) {
                 return httpCode
             }
-
+'1'
             const addressID = await this.addressQuery(pacient)
             const symptomsIDs = await this.symptomsQuery(pacient)
             const reportID = await this.reportQuery(pacient)
@@ -46,6 +46,7 @@ class PacientSerializer {
                 const address_ID = address_ID_result[0].value
                 if (pacient.address.street) await this.updateAddress(address_ID, "street", pacient.address.street)
                 if (pacient.address.number) await this.updateAddress(address_ID, "number", pacient.address.number)
+                if (pacient.address.complement) await this.updateAddress(address_ID, "complement", pacient.address.complement)
                 if (pacient.address.neighborhood) await this.updateAddress(address_ID, "neighborhood", pacient.address.neighborhood)
                 if (pacient.address.reference_unit) await this.updateAddress(address_ID, "reference_unit", pacient.address.reference_unit)
             }
@@ -97,12 +98,12 @@ class PacientSerializer {
         if (!result.length) return {status: 409}
         var pacient = result[0]
 
-        const addressQuery = `SELECT * FROM addresses WHERE address_ID = '${pacient.address_ID}'`
+        const addressQuery = `SELECT street, number, complement, neighborhood, reference_unit FROM addresses WHERE address_ID = '${pacient.address_ID}'`
         const address = await this.client.query(addressQuery)
         if (!address.length) return {status: 500}
         pacient.address = address[0]
 
-        const reportsQuery = `SELECT * FROM reports WHERE report_ID = '${pacient.report_ID}'`
+        const reportsQuery = `SELECT data_origin, comorbidity, covid_exam, covid_result, situation, notification_date, symptoms_start_date FROM reports WHERE report_ID = '${pacient.report_ID}'`
         const reports = await this.client.query(reportsQuery)
         if (!reports.length) return {status: 500}
         pacient.report = reports[0]
@@ -166,7 +167,7 @@ class PacientSerializer {
     }
 
     async addressQuery(pacient) {
-        const addressQuery = `INSERT INTO addresses (street, number, neighborhood, reference_unit) VALUES ('${pacient.address.street}', '${pacient.address.number}', '${pacient.address.neighborhood}', '${pacient.address.reference_unit}')`
+        const addressQuery = `INSERT INTO addresses (street, number, complement, neighborhood, reference_unit) VALUES ('${pacient.address.street}', '${pacient.address.number}', '${pacient.address.complement}', '${pacient.address.neighborhood}', '${pacient.address.reference_unit}')`
         const resultAddress = await this.client.query(addressQuery)
         return resultAddress.insertId
     }
