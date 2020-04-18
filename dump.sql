@@ -61,6 +61,7 @@ CREATE TABLE pacients (
     phone_number varchar(255),
     birth_date date,
     address_ID int,
+    report_ID bigint(20),
     user varchar(255),
     PRIMARY KEY (cpf)
 );
