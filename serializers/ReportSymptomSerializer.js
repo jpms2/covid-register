@@ -6,7 +6,6 @@ class ReportSymptomSerializer {
     }
 
     async create(reportID, symptomsID) {
-        console.log("SymptomReportSerializer - Report ID listed for update is: " + reportID)
         var query
         var tableIDs = []
 
@@ -17,6 +16,13 @@ class ReportSymptomSerializer {
         }
 
         return tableIDs
+    }
+
+    async find(report_ID) {
+        const symptomsQuery = `SELECT symptom_ID FROM report_symptom WHERE report_ID = '${report_ID}'`
+        const symptomIDs = await this.client.query(symptomsQuery)
+
+        return symptomIDs
     }
 }
 

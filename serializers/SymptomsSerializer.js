@@ -26,6 +26,18 @@ class SymptomsSerializer {
 
         return query
     }
+
+    async find(symptomIDs) {
+        var symptoms = []
+
+        for(var element in symptomIDs) {
+            var symptomQuery = `SELECT name FROM symptoms WHERE symptom_ID = '${symptomIDs[element].symptom_ID}'`
+            const symptom = await this.client.query(symptomQuery)
+            symptoms.push(symptom[0])
+        }
+
+        return symptoms
+    }
 }
 
 module.exports = SymptomsSerializer

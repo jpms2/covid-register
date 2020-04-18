@@ -27,6 +27,14 @@ class AddressSerializer {
         await this.client.query(query)
     }
 
+    async find(address_ID) {
+        const addressQuery = `SELECT street, number, complement, neighborhood, reference_unit FROM addresses WHERE address_ID = '${address_ID}'`
+        const address = await this.client.query(addressQuery)
+        if (!address.length) return {status: 500}
+
+        return address[0]
+    }
+
 }
 
 module.exports = AddressSerializer

@@ -30,6 +30,14 @@ class ReportSerializer {
         const query = `UPDATE reports SET ${columnName}='${value}' WHERE report_ID='${report_ID}'`
         await this.client.query(query)
     }
+
+    async find(report_ID) {
+        const reportsQuery = `SELECT data_origin, comorbidity, covid_exam, covid_result, situation, notification_date, symptoms_start_date FROM reports WHERE report_ID = '${report_ID}'`
+        const reports = await this.client.query(reportsQuery)
+        if (!reports.length) return {status: 500}
+
+        return reports[0]
+    }
 }
 
 module.exports = ReportSerializer
