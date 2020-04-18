@@ -15,7 +15,7 @@ class PacientSerializer {
             if (httpCode === 409) {
                 return httpCode
             }
-'1'
+
             const addressID = await this.addressQuery(pacient)
             const symptomsIDs = await this.symptomsQuery(pacient)
             const reportID = await this.reportQuery(pacient)
@@ -144,7 +144,7 @@ class PacientSerializer {
                     orderBy = "addr." + list.order_by
                     break
                 case "notification_date":
-                    orderBy = "notification_date." + list.order_by
+                    orderBy = "rep." + list.order_by
                     break;
                 default:
                     console.log("No implementation for this ordenation")

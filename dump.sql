@@ -19,6 +19,7 @@ CREATE TABLE `addresses` (
     `address_ID` INT NOT NULL AUTO_INCREMENT,
     `street` varchar(255),
     `number` int,
+    `complement` varchar(255),
     `neighborhood` varchar(255),
     `reference_unit` varchar(255),
     PRIMARY KEY (`address_ID`)
