@@ -57,7 +57,7 @@ class PacientSerializer {
             }
 
             if (pacient.report) {
-                const report_ID = this.reportSerializer.update(pacient.cpf, pacient.report)
+                const report_ID = await this.reportSerializer.update(pacient.cpf, pacient.report)
                 console.log("PacientSerializer: Report ID listed for update is: " + report_ID)
                 if(pacient.report.symptoms) {
                     const symptomsIDs = await this.symptomsSerializer.create(pacient.report.symptoms)

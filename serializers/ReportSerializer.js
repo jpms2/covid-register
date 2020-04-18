@@ -15,7 +15,6 @@ class ReportSerializer {
         const reportIDQuery = `SELECT report_ID AS value FROM pacients WHERE cpf = '${cpf}'`
         const report_ID_result = await this.client.query(reportIDQuery)
         const report_ID = report_ID_result[0].value
-        console.log("Report ID listed for update is: " + report_ID)
         if (report.data_origin) await this.updateReport(report_ID, "data_origin", report.data_origin)
         if (report.comorbidity) await this.updateReport(report_ID, "comorbidity", report.comorbidity)
         if (report.covid_exam) await this.updateReport(report_ID, "covid_exam", report.covid_exam === true ? 1 : 0)
