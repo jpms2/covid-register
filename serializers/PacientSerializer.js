@@ -1,10 +1,22 @@
 MysqlClient = require("../database/MysqlClient")
+ReportSerializer = require("./ReportSerializer")
+AddressSerializer = require("./AddressSerializer")
+SymptomsSerializer = require("./SymptomsSerializer")
+ReportSymptomSerializer = require("./ReportSymptomSerializer")
 
 class PacientSerializer {
     client;
+    reportSerializer
+    addressSerializer
+    symptomsSerializer
+    reportSymptomSerializer
 
     constructor(mysqlClient) {
         this.client = mysqlClient
+        this.reportSerializer = new ReportSerializer(mysqlClient)
+        this.addressSerializer = new AddressSerializer(mysqlClient)
+        this.symptomsSerializer = new SymptomsSerializer(mysqlClient)
+        this.reportSymptomSerializer = new ReportSymptomSerializer(mysqlClient)
     }
 
     async create(user, pacient) {
@@ -16,11 +28,11 @@ class PacientSerializer {
                 return httpCode
             }
 
-            const addressID = await this.addressQuery(pacient)
-            const symptomsIDs = await this.symptomsQuery(pacient)
-            const reportID = await this.reportQuery(pacient)
+            const addressID = await this.addressSerializer.create(pacient.address)
+            const symptomsIDs = await this.SymptomsSerializer.create(pacient.report.symptoms)
+            const reportID = await this.reportSerializer.create(pacient.report)
             await this.pacientQuery(pacient, user, addressID, reportID)
-            await this.reportSymptomsQuery(reportID, symptomsIDs)
+            await this.reportSymptomSerializer.create(reportID, symptomsIDs)
             console.log("A new pacient has been recorded")
 
             return httpCode
@@ -164,53 +176,6 @@ class PacientSerializer {
         const result = await this.client.query(verifyQuery)
 
         return !result.length ? 201 : 409
-    }
-
-    async addressQuery(pacient) {
-        const addressQuery = `INSERT INTO addresses (street, number, complement, neighborhood, reference_unit) VALUES ('${pacient.address.street}', '${pacient.address.number}', '${pacient.address.complement}', '${pacient.address.neighborhood}', '${pacient.address.reference_unit}')`
-        const resultAddress = await this.client.query(addressQuery)
-        return resultAddress.insertId
-    }
-
-    async reportQuery(pacient) {
-        const reportQuery = `INSERT INTO reports (data_origin, comorbidity, covid_exam, covid_result, situation, notification_date, symptoms_start_date) VALUES ('${pacient.report.data_origin}', '${pacient.report.comorbidity}', '${pacient.report.covid_exam === true ? 1 : 0}', '${pacient.report.covid_result}', '${pacient.report.situation}', '${pacient.report.notification_date}', '${pacient.report.symptoms_start_date}')`
-        const resultReport = await this.client.query(reportQuery)
-        return resultReport.insertId
-    }
-
-    async symptomsQuery(pacient) {
-        const symptomQueries = this.symptomQuery(pacient.report.symptoms)
-        var symptomIDs = []
-        
-        for(var element of symptomQueries) {
-            const resultSymptom = await this.client.query(element)
-            symptomIDs.push(resultSymptom.insertId)
-        }
-
-        return symptomIDs
-    }
-
-    symptomQuery(symptoms) {
-        var query = []
-
-        symptoms.forEach(element => {
-            query.push(`INSERT INTO symptoms (name) VALUES ('${element.name}')`)
-        });
-
-        return query
-    }
-
-    async reportSymptomsQuery(reportID, symptomsID) {
-        var query
-        var tableIDs = []
-
-        for(var element in symptomsID) {
-            query = `INSERT INTO report_symptom (report_ID, symptom_ID) VALUES ('${reportID}', '${symptomsID[element]}')`
-            const id = await this.client.query(query)
-            tableIDs.push(id.insertId)
-        }
-
-        return tableIDs
     }
 
     async pacientQuery(pacient, user, addressID, reportID) {

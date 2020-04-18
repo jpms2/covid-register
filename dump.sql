@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS `pacients`;
 DROP TABLE IF EXISTS `report_symptom`;
 DROP TABLE IF EXISTS `symptoms`;
 DROP TABLE IF EXISTS `reports`;
+DROP TABLE IF EXISTS `pacient_report`;
 DROP TABLE IF EXISTS `addresses`;
 DROP TABLE IF EXISTS `users`;
 
@@ -60,9 +61,16 @@ CREATE TABLE pacients (
     phone_number varchar(255),
     birth_date date,
     address_ID int,
-    report_ID bigint(20),
     user varchar(255),
     PRIMARY KEY (cpf)
+);
+
+CREATE TABLE pacient_report (
+    `pacient_report_ID` bigint(20),
+    `pacient_ID` varchar(255),
+    `report_ID` bigint(20),
+    PRIMARY KEY (pacient_report_ID)
+
 );
 
 CREATE USER IF NOT EXISTS 'covid'@'%' identified BY 'Covid.123';
