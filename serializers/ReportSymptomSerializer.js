@@ -6,6 +6,7 @@ class ReportSymptomSerializer {
     }
 
     async create(reportID, symptomsID) {
+        console.log("SymptomReportSerializer - Report ID listed for update is: " + report_ID)
         var query
         var tableIDs = []
 
