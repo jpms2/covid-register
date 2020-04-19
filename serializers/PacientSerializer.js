@@ -3,6 +3,7 @@ ReportSerializer = require("./ReportSerializer")
 AddressSerializer = require("./AddressSerializer")
 SymptomsSerializer = require("./SymptomsSerializer")
 ReportSymptomSerializer = require("./ReportSymptomSerializer")
+PacientReportSerializer = require("./PacientReportSerializer")
 
 class PacientSerializer {
     client;
@@ -10,6 +11,7 @@ class PacientSerializer {
     addressSerializer
     symptomsSerializer
     reportSymptomSerializer
+    pacientReportSerializer
 
     constructor(mysqlClient) {
         this.client = mysqlClient
@@ -17,6 +19,7 @@ class PacientSerializer {
         this.addressSerializer = new AddressSerializer(mysqlClient)
         this.symptomsSerializer = new SymptomsSerializer(mysqlClient)
         this.reportSymptomSerializer = new ReportSymptomSerializer(mysqlClient)
+        this.pacientReportSerializer = new PacientReportSerializer(mysqlClient)
     }
 
     async create(user, pacient) {
@@ -30,7 +33,7 @@ class PacientSerializer {
 
             const addressID = await this.addressSerializer.create(pacient.address)
             const symptomsIDs = await this.symptomsSerializer.create(pacient.report.symptoms)
-            const reportID = await this.reportSerializer.create(pacient.report)
+            const reportID = await this.reportSerializer.create(pacient.cpf, pacient.report)
             await this.pacientQuery(pacient, user, addressID, reportID)
             await this.reportSymptomSerializer.create(reportID, symptomsIDs)
             console.log("A new pacient has been recorded")
@@ -70,11 +73,13 @@ class PacientSerializer {
                 this.addressSerializer.update(pacient.cpf, pacient.address)
             }
 
-            if (pacient.report) {
-                const report_ID = await this.reportSerializer.update(pacient.cpf, pacient.report)
-                if(pacient.report.symptoms) {
-                    const symptomsIDs = await this.symptomsSerializer.create(pacient.report.symptoms)
-                    await this.reportSymptomSerializer.create(report_ID, symptomsIDs)
+            if (pacient.reports) {
+                for (const report of pacient.reports) {
+                    await this.reportSerializer.update(report)
+                    if(report.symptoms) {
+                        const symptomsIDs = await this.symptomsSerializer.create(report.symptoms)
+                        await this.reportSymptomSerializer.create(report.report_ID, symptomsIDs)
+                    }
                 }
             }
         } catch(err) {
@@ -101,18 +106,27 @@ class PacientSerializer {
         if (address.status) return {status: 500}
         pacient.address = address
 
-        const report = await this.reportSerializer.find(pacient.report_ID)
-        if (report.status) return {status: 500}
-        pacient.report = report
+        const report_IDs = await this.pacientReportSerializer.find(pacient.cpf)
 
-        pacient.report.symptoms = []
+        var reports = []
 
-        const symptomIDs = await this.reportSymptomSerializer.find(pacient.report_ID)
+        for (const element of report_IDs) {
+            var report = await this.reportSerializer.find(element.report_ID)
+            if (report.status) return {status: 500}
 
-        const symptoms = await this.symptomsSerializer.find(symptomIDs)
-        pacient.report.symptoms = symptoms
+            report.symptoms = []
 
-        pacient.report.covid_exam = pacient.report.covid_exam == 1
+            const symptomIDs = await this.reportSymptomSerializer.find(element.report_ID)
+
+            const symptoms = await this.symptomsSerializer.find(symptomIDs)
+            report.symptoms = symptoms
+
+            report.covid_exam = report.covid_exam == 1
+
+            reports.push(report)
+        }
+
+        pacient.reports = reports
 
         return {status : 200, pacient: pacient}
     }

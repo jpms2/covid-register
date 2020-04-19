@@ -67,7 +67,7 @@ CREATE TABLE pacients (
 );
 
 CREATE TABLE pacient_report (
-    `pacient_report_ID` bigint(20),
+    `pacient_report_ID` bigint(20) NOT NULL AUTO_INCREMENT,
     `pacient_ID` varchar(255),
     `report_ID` bigint(20),
     PRIMARY KEY (pacient_report_ID)

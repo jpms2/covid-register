@@ -10,6 +10,7 @@ const jwt = require('jsonwebtoken')
 
 var UserController = require("./controllers/UserController")
 var PacientController = require("./controllers/PacientController")
+var ReportController = require("./controllers/ReportController")
 var MysqlClient = require("./database/MysqlClient")
 
 var port = process.argv.slice(2)[0];
@@ -22,6 +23,7 @@ mysqlClient = new MysqlClient();
 mysqlClient.connect()
 userController = new UserController(mysqlClient)
 pacientController = new PacientController(mysqlClient)
+reportController = new ReportController(mysqlClient)
 
 app.post("/create/user", (req, res, next) => {
     userController.create(req.body.user).then(message => {
@@ -77,6 +79,12 @@ app.post("/pacient/list", authenticateToken, (req, res) => {
         res.send(pacients)
     })
 });
+
+app.post("/report/create", authenticateToken, (req, res) => {
+    reportController.create(req.body.report).then(message => {
+        res.status(message.statusCode).send(message)
+    })
+})
 
 app.listen(port, () => {
  console.log("Server running on port " + port);
