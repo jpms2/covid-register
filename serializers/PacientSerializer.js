@@ -74,7 +74,8 @@ class PacientSerializer {
             }
 
             if (pacient.reports) {
-                for (const report of pacient.reports) {
+                for (const reportObject of pacient.reports) {
+                    const report = reportObject.report
                     await this.reportSerializer.update(report)
                     if(report.symptoms) {
                         const symptomsIDs = await this.symptomsSerializer.create(report.symptoms)
