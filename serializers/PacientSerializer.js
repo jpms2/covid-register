@@ -61,6 +61,7 @@ class PacientSerializer {
 
     async update(pacient) {
         const existence = this.verifyPacientExistence(pacient.cpf)
+        console.log(existence)
         if (!pacient.cpf) return 409
         if (existence === 201) return 409
         try {

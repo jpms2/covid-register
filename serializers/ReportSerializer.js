@@ -28,14 +28,12 @@ class ReportSerializer {
         console.log("Pacient found!")
 
         try {
-            console.log("Saving report")
             const reportQuery = this.reportQuery(report)
             const resultReport = await this.client.query(reportQuery)
-            console.log("Saving symptoms")
             const symptomsIDs = await this.symptomsSerializer.create(report.symptoms)
             await this.pacientReportSerializer.create(cpf, resultReport.insertId)
             await this.reportSymptomSerializer.create(resultReport.insertId, symptomsIDs)
-            console.log("Finished saving report")
+            console.log("Finished saving new report")
 
             return httpCode
         } catch (err) {   
