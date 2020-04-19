@@ -123,7 +123,7 @@ class PacientSerializer {
 
             report.covid_exam = report.covid_exam == 1
 
-            reports.push(report)
+            reports.push({report: report})
         }
 
         pacient.reports = reports
