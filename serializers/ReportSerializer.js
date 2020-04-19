@@ -30,7 +30,7 @@ class ReportSerializer {
             const resultReport = await this.client.query(reportQuery)
             const symptomsIDs = await this.symptomsSerializer.create(report.symptoms)
             await this.pacientReportSerializer.create(cpf, resultReport.insertId)
-            await this.reportSymptomSerializer.create(reportID, symptomsIDs)
+            await this.reportSymptomSerializer.create(resultReport.insertId, symptomsIDs)
 
             return httpCode
         } catch (err) {   
