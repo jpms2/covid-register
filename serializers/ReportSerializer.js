@@ -28,7 +28,7 @@ class ReportSerializer {
         try {
             const reportQuery = this.reportQuery(report)
             const resultReport = await this.client.query(reportQuery)
-            const symptomsIDs = await this.symptomsSerializer.create(pacient.report.symptoms)
+            const symptomsIDs = await this.symptomsSerializer.create(report.symptoms)
             await this.pacientReportSerializer.create(cpf, resultReport.insertId)
             await this.reportSymptomSerializer.create(reportID, symptomsIDs)
 
