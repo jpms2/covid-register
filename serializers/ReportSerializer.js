@@ -1,4 +1,6 @@
 PacientReportSerializer = require("./PacientReportSerializer")
+SymptomsSerializer = require("./SymptomsSerializer")
+ReportSymptomSerializer = require("./ReportSymptomSerializer")
 
 class ReportSerializer {
     client;
@@ -7,12 +9,15 @@ class ReportSerializer {
     constructor(mysqlClient) {
         this.client = mysqlClient
         this.pacientReportSerializer = new PacientReportSerializer(mysqlClient)
+        this.symptomsSerializer = new SymptomsSerializer(mysqlClient)
+        this.reportSymptomSerializer = new ReportSymptomSerializer(mysqlClient)
     }
 
     async create(cpf, report) {
         const reportQuery = this.reportQuery(report)
         const resultReport = await this.client.query(reportQuery)
         await this.pacientReportSerializer.create(cpf, resultReport.insertId)
+        
         return resultReport.insertId
     }
 
@@ -23,7 +28,9 @@ class ReportSerializer {
         try {
             const reportQuery = this.reportQuery(report)
             const resultReport = await this.client.query(reportQuery)
+            const symptomsIDs = await this.symptomsSerializer.create(pacient.report.symptoms)
             await this.pacientReportSerializer.create(cpf, resultReport.insertId)
+            await this.reportSymptomSerializer.create(reportID, symptomsIDs)
 
             return httpCode
         } catch (err) {   
