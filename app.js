@@ -80,7 +80,7 @@ app.post("/pacient/list", authenticateToken, (req, res) => {
     })
 });
 
-app.post("/report/create", authenticateToken, (req, res) => {
+app.post("/create/report", authenticateToken, (req, res) => {
     reportController.create(req.body).then(message => {
         res.status(message.statusCode).send(message)
     })
