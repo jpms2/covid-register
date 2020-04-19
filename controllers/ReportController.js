@@ -8,8 +8,8 @@ class ReportController{
         this.reportSerializer = new ReportSerializer(mysqlClient)
     }
 
-    async create(pacient) {
-        const httpCode = await this.reportSerializer.create(pacient)
+    async create(body) {
+        const httpCode = await this.reportSerializer.create(body.cpf, body.report)
            var message
            switch (httpCode) {
                case 500 :
