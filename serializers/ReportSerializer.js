@@ -22,10 +22,8 @@ class ReportSerializer {
     }
 
     async createSubsequent(cpf, report) {
-        console.log("Verifying pacient existence")
-        var httpCode = this.verifyPacientExistence(cpf)
-        if (httpCode === 409) return 409
-        console.log("Pacient found!")
+        var httpCode = await this.verifyPacientExistence(cpf)
+        if (httpCode === 409) return httpCode
 
         try {
             const reportQuery = this.reportQuery(report)
