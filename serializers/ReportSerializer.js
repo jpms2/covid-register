@@ -10,7 +10,7 @@ class ReportSerializer {
     }
 
     async create(cpf, report) {
-        const reportQuery = `INSERT INTO reports (data_origin, comorbidity, covid_exam, covid_result, situation, notification_date, symptoms_start_date) VALUES ('${report.data_origin}', '${report.comorbidity}', '${report.covid_exam === true ? 1 : 0}', '${report.covid_result}', '${report.situation}', '${report.notification_date}', '${report.symptoms_start_date}')`
+        const reportQuery = this.reportQuery(report)
         const resultReport = await this.client.query(reportQuery)
         await this.pacientReportSerializer.create(cpf, resultReport.insertId)
         return resultReport.insertId
@@ -21,7 +21,7 @@ class ReportSerializer {
         if (httpCode === 409) return 409
 
         try {
-            const reportQuery = `INSERT INTO reports (data_origin, comorbidity, covid_exam, covid_result, situation, notification_date, symptoms_start_date) VALUES ('${report.data_origin}', '${report.comorbidity}', '${report.covid_exam === true ? 1 : 0}', '${report.covid_result}', '${report.situation}', '${report.notification_date}', '${report.symptoms_start_date}')`
+            const reportQuery = this.reportQuery(report)
             const resultReport = await this.client.query(reportQuery)
             await this.pacientReportSerializer.create(cpf, resultReport.insertId)
 
@@ -29,6 +29,14 @@ class ReportSerializer {
         } catch (err) {   
             console.log ('error', err.message, err.stack)
             return 500
+        }
+    }
+
+    reportQuery(report) {
+        if (report.covid_exam) {
+            return `INSERT INTO reports (data_origin, comorbidity, covid_exam, covid_result, situation, notification_date, symptoms_start_date) VALUES ('${report.data_origin}', '${report.comorbidity}', '${report.covid_exam === true ? 1 : 0}', '${report.covid_result}', '${report.situation}', '${report.notification_date}', '${report.symptoms_start_date}')`
+        } else {
+            return `INSERT INTO reports (data_origin, comorbidity, covid_exam, situation, notification_date, symptoms_start_date) VALUES ('${report.data_origin}', '${report.comorbidity}', '${report.covid_exam === true ? 1 : 0}', '${report.situation}', '${report.notification_date}', '${report.symptoms_start_date}')`
         }
     }
 
