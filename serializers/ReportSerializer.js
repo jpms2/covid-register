@@ -22,15 +22,20 @@ class ReportSerializer {
     }
 
     async createSubsequent(cpf, report) {
+        console.log("Verifying pacient existence")
         var httpCode = this.verifyPacientExistence(cpf)
         if (httpCode === 409) return 409
+        console.log("Pacient found!")
 
         try {
+            console.log("Saving report")
             const reportQuery = this.reportQuery(report)
             const resultReport = await this.client.query(reportQuery)
+            console.log("Saving symptoms")
             const symptomsIDs = await this.symptomsSerializer.create(report.symptoms)
             await this.pacientReportSerializer.create(cpf, resultReport.insertId)
             await this.reportSymptomSerializer.create(resultReport.insertId, symptomsIDs)
+            console.log("Finished saving report")
 
             return httpCode
         } catch (err) {   
