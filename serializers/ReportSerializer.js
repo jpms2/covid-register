@@ -26,7 +26,7 @@ class ReportSerializer {
             await this.pacientReportSerializer.create(cpf, resultReport.insertId)
 
             return httpCode
-        } catch (error) {   
+        } catch (err) {   
             console.log ('error', err.message, err.stack)
             return 500
         }
