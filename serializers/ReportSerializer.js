@@ -67,7 +67,7 @@ class ReportSerializer {
         const verifyQuery = ` SELECT cpf FROM pacients WHERE cpf = '${cpf}'`
         const result = await this.client.query(verifyQuery)
 
-        return !result.length ? 201 : 409
+        return result.length ? 201 : 409
     }
 }
 

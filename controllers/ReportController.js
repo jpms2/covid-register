@@ -16,7 +16,7 @@ class ReportController{
                    message = "Internal error"
                    break;
                case 409 :
-                   message = "This Report is already registered"
+                   message = "There is no pacient with this cpf"
                    break;
                case 201 :
                    message = "OK"

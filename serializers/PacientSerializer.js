@@ -60,7 +60,9 @@ class PacientSerializer {
     }
 
     async update(pacient) {
+        const existence = this.verifyPacientExistence(pacient.cpf)
         if (!pacient.cpf) return 409
+        if (existence === 201) return 409
         try {
             if (pacient.name) await this.updatePacient(pacient.cpf, "name", pacient.name)
             if (pacient.mother_name) await this.updatePacient(pacient.cpf, "mother_name", pacient.mother_name)
