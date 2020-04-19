@@ -11,7 +11,7 @@ class PacientReportSerializer {
     }
 
     async find(cpf) {
-        const query = `SELECT report_ID FROM  pacient_report WHERE cpf = '${cpf}'`
+        const query = `SELECT report_ID FROM  pacient_report WHERE pacient_ID = '${cpf}'`
         const reports = await this.client.query(query)
 
         return reports
