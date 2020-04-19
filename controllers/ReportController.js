@@ -9,7 +9,7 @@ class ReportController{
     }
 
     async create(body) {
-        const httpCode = await this.reportSerializer.create(body.cpf, body.report)
+        const httpCode = await this.reportSerializer.createSubsequent(body.cpf, body.report)
            var message
            switch (httpCode) {
                case 500 :

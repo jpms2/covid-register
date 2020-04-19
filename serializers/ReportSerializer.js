@@ -16,6 +16,22 @@ class ReportSerializer {
         return resultReport.insertId
     }
 
+    async createSubsequent(cpf, report) {
+        var httpCode = this.verifyPacientExistence(cpf)
+        if (httpCode === 409) return 409
+
+        try {
+            const reportQuery = `INSERT INTO reports (data_origin, comorbidity, covid_exam, covid_result, situation, notification_date, symptoms_start_date) VALUES ('${report.data_origin}', '${report.comorbidity}', '${report.covid_exam === true ? 1 : 0}', '${report.covid_result}', '${report.situation}', '${report.notification_date}', '${report.symptoms_start_date}')`
+            const resultReport = await this.client.query(reportQuery)
+            await this.pacientReportSerializer.create(cpf, resultReport.insertId)
+
+            return httpCode
+        } catch (error) {   
+            console.log ('error', err.message, err.stack)
+            return 500
+        }
+    }
+
     async update(report) {
         if (report.data_origin) await this.updateReport(report.report_ID, "data_origin", report.data_origin)
         if (report.comorbidity) await this.updateReport(report.report_ID, "comorbidity", report.comorbidity)
@@ -37,6 +53,13 @@ class ReportSerializer {
         if (!reports.length) return {status: 500}
 
         return reports[0]
+    }
+
+    async verifyPacientExistence(cpf) {
+        const verifyQuery = ` SELECT cpf FROM pacients WHERE cpf = '${cpf}'`
+        const result = await this.client.query(verifyQuery)
+
+        return !result.length ? 201 : 409
     }
 }
 

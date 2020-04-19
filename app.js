@@ -81,7 +81,7 @@ app.post("/pacient/list", authenticateToken, (req, res) => {
 });
 
 app.post("/report/create", authenticateToken, (req, res) => {
-    reportController.create(req.body.report).then(message => {
+    reportController.create(req.body).then(message => {
         res.status(message.statusCode).send(message)
     })
 })
