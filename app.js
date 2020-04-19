@@ -25,13 +25,6 @@ userController = new UserController(mysqlClient)
 pacientController = new PacientController(mysqlClient)
 reportController = new ReportController(mysqlClient)
 
-app.post("/create/user", (req, res, next) => {
-    userController.create(req.body.user).then(message => {
-        res.status(message.statusCode).send(message)
-    })
-});
-
-
 app.post("/authenticate", (req, res) => {
     userController.authenticate(req.body.user).then(message => {
         if (message.statusCode === 200) {
