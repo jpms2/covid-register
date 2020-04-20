@@ -5,17 +5,40 @@ class SymptomsSerializer {
         this.client = mysqlClient
     }
 
-    async create(symptoms) {
+    async create(reportID, symptoms) {
         const symptomQueries = this.symptomQuery(symptoms)
         const values = this.symptomQueryValue(symptoms)
         var symptomIDs = []
         
+        const filteredSymptoms = await this.symptomsOf(reportID)
         for(var element in symptomQueries) {
-            const resultSymptom = await this.client.query(symptomQueries[element], values[element])
-            symptomIDs.push(resultSymptom.insertId)
+            if (!filteredSymptoms.length || await this.symptomIsNotRepeated(filteredSymptoms, symptoms[element])) {
+                const resultSymptom = await this.client.query(symptomQueries[element], values[element])
+                symptomIDs.push(resultSymptom.insertId)
+            }
         }
 
         return symptomIDs
+    }
+
+    async symptomsOf(reportID) {
+        const query = `SELECT symptom_ID FROM report_symptom WHERE report_ID = ?`
+        const values = [reportID]
+        const result = this.client.query(query, values)
+
+        return result
+    }
+
+    async symptomIsNotRepeated(filteredSymptoms, symptom) {
+        for (const filteredSymptom of filteredSymptoms) {
+            const query = `SELECT * FROM symptoms WHERE name = ? AND symptom_ID = ?`
+            const values = [symptom.name, filteredSymptom.symptom_ID]
+            const symptoms = await this.client.query(query, values)
+
+            if (symptoms.length) return false
+        }
+
+        return true
     }
 
     symptomQuery(symptoms) {

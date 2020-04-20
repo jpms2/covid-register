@@ -10,6 +10,8 @@ class ReportSymptomSerializer {
         var values
         var tableIDs = []
 
+        if (!symptomsID) return tableIDs
+
         for(var element in symptomsID) {
             query = `INSERT INTO report_symptom (report_ID, symptom_ID) VALUES (?, ?)`
             values = [reportID, symptomsID[element]]

@@ -32,8 +32,8 @@ class PacientSerializer {
             }
 
             const addressID = await this.addressSerializer.create(pacient.address)
-            const symptomsIDs = await this.symptomsSerializer.create(pacient.report.symptoms)
             const reportID = await this.reportSerializer.create(pacient.cpf, pacient.report)
+            const symptomsIDs = await this.symptomsSerializer.create(reportID, pacient.report.symptoms)
             await this.pacientQuery(pacient, user, addressID, reportID)
             await this.reportSymptomSerializer.create(reportID, symptomsIDs)
             console.log("A new pacient has been recorded")
