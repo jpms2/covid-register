@@ -44,7 +44,7 @@ class SymptomsSerializer {
     symptomQuery(symptoms) {
         var query = []
 
-        if (!symptoms.length) return query
+        if (!symptoms || !symptoms.length) return query
 
         symptoms.forEach(element => {
             query.push(`INSERT INTO symptoms (name) VALUES ('${element.name}')`)
