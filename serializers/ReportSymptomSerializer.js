@@ -7,11 +7,13 @@ class ReportSymptomSerializer {
 
     async create(reportID, symptomsID) {
         var query
+        var values
         var tableIDs = []
 
         for(var element in symptomsID) {
-            query = `INSERT INTO report_symptom (report_ID, symptom_ID) VALUES ('${reportID}', '${symptomsID[element]}')`
-            const id = await this.client.query(query)
+            query = `INSERT INTO report_symptom (report_ID, symptom_ID) VALUES (?, ?)`
+            values = [reportID, symptomsID[element]]
+            const id = await this.client.query(query, values)
             tableIDs.push(id.insertId)
         }
 
@@ -19,8 +21,9 @@ class ReportSymptomSerializer {
     }
 
     async find(report_ID) {
-        const symptomsQuery = `SELECT symptom_ID FROM report_symptom WHERE report_ID = '${report_ID}'`
-        const symptomIDs = await this.client.query(symptomsQuery)
+        const symptomsQuery = `SELECT symptom_ID FROM report_symptom WHERE report_ID = ?`
+        const values = [report_ID]
+        const symptomIDs = await this.client.query(symptomsQuery, values)
 
         return symptomIDs
     }

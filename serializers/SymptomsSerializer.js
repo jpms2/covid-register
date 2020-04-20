@@ -7,10 +7,11 @@ class SymptomsSerializer {
 
     async create(symptoms) {
         const symptomQueries = this.symptomQuery(symptoms)
+        const values = this.symptomQueryValue(symptoms)
         var symptomIDs = []
         
-        for(var element of symptomQueries) {
-            const resultSymptom = await this.client.query(element)
+        for(var element in symptomQueries) {
+            const resultSymptom = await this.client.query(symptomQueries[element], values[element])
             symptomIDs.push(resultSymptom.insertId)
         }
 
@@ -27,12 +28,23 @@ class SymptomsSerializer {
         return query
     }
 
+    symptomQueryValue(symptoms) {
+        var values = []
+
+        symptoms.forEach(element => {
+            values.push([element.name])
+        });
+
+        return values
+    }
+
     async find(symptomIDs) {
         var symptoms = []
 
         for(var element in symptomIDs) {
-            var symptomQuery = `SELECT name FROM symptoms WHERE symptom_ID = '${symptomIDs[element].symptom_ID}'`
-            const symptom = await this.client.query(symptomQuery)
+            var symptomQuery = `SELECT name FROM symptoms WHERE symptom_ID = ?`
+            var values = [symptomIDs[element].symptom_ID]
+            const symptom = await this.client.query(symptomQuery, values)
             symptoms.push(symptom[0])
         }
 

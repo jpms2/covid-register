@@ -9,10 +9,11 @@ class UserSerializer {
 
     async create(user) {
         var httpCode = 201
-        var queryValue = `INSERT INTO users (username, password) VALUES ('${user.username}', '${user.password}')`
+        var queryValue = `INSERT INTO users (username, password) VALUES (?, ?)`
+        var values = [user.username, user.password]
         
         try {
-            await this.client.query(queryValue)
+            await this.client.query(queryValue, values)
             return httpCode
         } catch(err) {
             if (err.code && err.errno) {
@@ -29,10 +30,11 @@ class UserSerializer {
 
     async authenticate(user) {
         var httpCode = 500
-        var queryValue = `SELECT * FROM users WHERE username = '${user.username}'`
+        var queryValue = `SELECT * FROM users WHERE username = ?`
+        var values = [user.username]
 
         try {
-            const result =  await this.client.query(queryValue)
+            const result =  await this.client.query(queryValue, values)
 
             if (Array.isArray(result)) {
                 if (result[0] && result[0].password) {

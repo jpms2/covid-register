@@ -27,7 +27,8 @@ class ReportSerializer {
 
         try {
             const reportQuery = this.reportQuery(report)
-            const resultReport = await this.client.query(reportQuery)
+            const values = this.reportQueryValues(report)
+            const resultReport = await this.client.query(reportQuery, values)
             const symptomsIDs = await this.symptomsSerializer.create(report.symptoms)
             await this.pacientReportSerializer.create(cpf, resultReport.insertId)
             await this.reportSymptomSerializer.create(resultReport.insertId, symptomsIDs)
@@ -42,9 +43,17 @@ class ReportSerializer {
 
     reportQuery(report) {
         if (report.covid_exam) {
-            return `INSERT INTO reports (data_origin, comorbidity, covid_exam, covid_result, situation, notification_date, symptoms_start_date) VALUES ('${report.data_origin}', '${report.comorbidity}', '${report.covid_exam === true ? 1 : 0}', '${report.covid_result}', '${report.situation}', '${report.notification_date}', '${report.symptoms_start_date}')`
+            return `INSERT INTO reports (data_origin, comorbidity, covid_exam, covid_result, situation, notification_date, symptoms_start_date) VALUES (?, ?, ?, ?, ?, ?, ?)`
         } else {
-            return `INSERT INTO reports (data_origin, comorbidity, covid_exam, situation, notification_date, symptoms_start_date) VALUES ('${report.data_origin}', '${report.comorbidity}', '${report.covid_exam === true ? 1 : 0}', '${report.situation}', '${report.notification_date}', '${report.symptoms_start_date}')`
+            return `INSERT INTO reports (data_origin, comorbidity, covid_exam, situation, notification_date, symptoms_start_date) VALUES (?, ?, ?, ?, ?, ?)`
+        }
+    }
+
+    reportQueryValues(report) {
+        if (report.covid_exam) {
+            return [report.data_origin, report.comorbidity, report.covid_exam === true ? 1 : 0, report.covid_result, report.situation, report.notification_date, report.symptoms_start_date]
+        } else {
+            return [report.data_origin, report.comorbidity, report.covid_exam === true ? 1 : 0, report.situation, report.notification_date, report.symptoms_start_date]
         }
     }
 
@@ -59,21 +68,24 @@ class ReportSerializer {
     }
 
     async updateReport(report_ID, columnName, value) {
-        const query = `UPDATE reports SET ${columnName}='${value}' WHERE report_ID='${report_ID}'`
-        await this.client.query(query)
+        const query = `UPDATE reports SET ?=? WHERE report_ID=?`
+        const values = [columnName, value, report_ID]
+        await this.client.query(query, values)
     }
 
     async find(report_ID) {
-        const reportsQuery = `SELECT * FROM reports WHERE report_ID = '${report_ID}'`
-        const reports = await this.client.query(reportsQuery)
+        const reportsQuery = `SELECT * FROM reports WHERE report_ID = ?`
+        const values = [report_ID]
+        const reports = await this.client.query(reportsQuery, values)
         if (!reports.length) return {status: 500}
 
         return reports[0]
     }
 
     async verifyPacientExistence(cpf) {
-        const verifyQuery = ` SELECT cpf FROM pacients WHERE cpf = '${cpf}'`
-        const result = await this.client.query(verifyQuery)
+        const verifyQuery = ` SELECT cpf FROM pacients WHERE cpf = ?`
+        const values = [cpf]
+        const result = await this.client.query(verifyQuery, values)
 
         return result.length ? 201 : 409
     }

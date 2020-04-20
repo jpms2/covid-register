@@ -46,15 +46,17 @@ class PacientSerializer {
     }
 
     async verifyPacientExistence(cpf) {
-        const verifyQuery = ` SELECT cpf FROM pacients WHERE cpf = '${cpf}'`
-        const result = await this.client.query(verifyQuery)
+        const verifyQuery = ` SELECT cpf FROM pacients WHERE cpf = ?`
+        const values = [cpf]
+        const result = await this.client.query(verifyQuery, values)
 
         return !result.length ? 201 : 409
     }
 
     async pacientQuery(pacient, user, addressID, reportID) {
-        const pacientQuery = `INSERT INTO pacients (cpf, name, mother_name, sex, sex_orientation, phone_number, birth_date, address_ID, report_ID, user) VALUES ('${pacient.cpf}', '${pacient.name}', '${pacient.mother_name}', '${pacient.sex}', '${pacient.sex_orientation}', '${pacient.phone_number}', '${pacient.birth_date}', '${addressID}', '${reportID}', '${user}')`
-        const result = await this.client.query(pacientQuery)
+        const pacientQuery = `INSERT INTO pacients (cpf, name, mother_name, sex, sex_orientation, phone_number, birth_date, address_ID, report_ID, user) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        const values = [pacient.cpf, pacient.name, pacient.mother_name, pacient.sex, pacient.sex_orientation, pacient.phone_number, pacient.birth_date, addressID, reportID, user]
+        const result = await this.client.query(pacientQuery, values)
 
         return result.insertId
     }
@@ -95,13 +97,15 @@ class PacientSerializer {
     }
 
     async updatePacient(cpf, columnName, value) {
-        const query = `UPDATE pacients SET ${columnName}='${value}' WHERE cpf='${cpf}' `
-        await this.client.query(query)
+        const query = `UPDATE pacients SET ?=? WHERE cpf=? `
+        const values = [columnName, value, cpf]
+        await this.client.query(query, values)
     }
 
     async find(cpf) {
-        const verifyQuery = ` SELECT * FROM pacients WHERE cpf = '${cpf}'`
-        const result = await this.client.query(verifyQuery)
+        const verifyQuery = ` SELECT * FROM pacients WHERE cpf = ?`
+        const values = [cpf]
+        const result = await this.client.query(verifyQuery, values)
         if (!result.length) return {status: 409}
         var pacient = result[0]
 
@@ -139,7 +143,7 @@ class PacientSerializer {
         const totalPacients = await this.client.query(totalPacientsQuery)
         const offset = list.page_size * (list.page_index - 1)
         var listQuery = `SELECT pac.cpf, pac.name, addr.reference_unit, rep.notification_date FROM pacients AS pac INNER JOIN addresses AS addr ON pac.address_ID = addr.address_ID INNER JOIN reports AS rep ON pac.report_ID = rep.report_ID`
-        
+
         if (list.order_by) {
             var orderBy
             switch (list.order_by) {

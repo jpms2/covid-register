@@ -19,9 +19,9 @@ class MysqlClient {
         return connection.state === 'authenticated'
     }
 
-    async query(sql) {
+    async query(sql, values) {
       const query = util.promisify(connection.query).bind(connection);
-      return await query(sql);
+      return await query(sql, values);
   }
 
 }
