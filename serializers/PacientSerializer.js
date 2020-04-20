@@ -97,8 +97,8 @@ class PacientSerializer {
     }
 
     async updatePacient(cpf, columnName, value) {
-        const query = `UPDATE pacients SET ?=? WHERE cpf=? `
-        const values = [columnName, value, cpf]
+        const query = `UPDATE pacients SET ${columnName}=? WHERE cpf=? `
+        const values = [value, cpf]
         await this.client.query(query, values)
     }
 

@@ -68,7 +68,7 @@ class ReportSerializer {
     }
 
     async updateReport(report_ID, columnName, value) {
-        const query = `UPDATE reports SET ?=? WHERE report_ID=?`
+        const query = `UPDATE reports SET ${columnName}=? WHERE report_ID=?`
         const values = [columnName, value, report_ID]
         await this.client.query(query, values)
     }

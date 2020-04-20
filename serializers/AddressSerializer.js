@@ -25,8 +25,8 @@ class AddressSerializer {
     }
 
     async updateAddress(addressID, columnName, value) {
-        const query = `UPDATE addresses SET ?=? WHERE address_ID=?`
-        const values = [columnName, value, addressID]
+        const query = `UPDATE addresses SET ${columnName}=? WHERE address_ID=?`
+        const values = [value, addressID]
         await this.client.query(query, values)
     }
 
