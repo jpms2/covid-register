@@ -82,7 +82,7 @@ class PacientSerializer {
                     const report = reportObject.report
                     await this.reportSerializer.update(report)
                     if(report.symptoms) {
-                        const symptomsIDs = await this.symptomsSerializer.create(report.symptoms)
+                        const symptomsIDs = await this.symptomsSerializer.create(report.report_ID, report.symptoms)
                         await this.reportSymptomSerializer.create(report.report_ID, symptomsIDs)
                     }
                 }
