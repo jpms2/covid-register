@@ -15,7 +15,8 @@ class ReportSerializer {
 
     async create(cpf, report) {
         const reportQuery = this.reportQuery(report)
-        const resultReport = await this.client.query(reportQuery)
+        const values = this.reportQueryValues(report)
+        const resultReport = await this.client.query(reportQuery, values)
         await this.pacientReportSerializer.create(cpf, resultReport.insertId)
         
         return resultReport.insertId
