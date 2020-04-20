@@ -56,6 +56,8 @@ class SymptomsSerializer {
     symptomQueryValue(symptoms) {
         var values = []
 
+        if (!symptoms || !symptoms.length) return values
+
         symptoms.forEach(element => {
             values.push([element.name])
         });
