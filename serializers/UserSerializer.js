@@ -38,7 +38,7 @@ class UserSerializer {
 
             if (Array.isArray(result)) {
                 if (result[0] && result[0].password) {
-                    httpCode = result[0].password === user.password ? 200 : 401
+                    return {httpCode: httpCode, hash: result[0].password}
                 } else {
                     httpCode = 404
                 }

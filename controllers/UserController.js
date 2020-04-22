@@ -1,4 +1,5 @@
 UserSerializer = require("../serializers/UserSerializer")
+bcrypt = require('bcrypt');
 MysqlClient = require("../database/MysqlClient")
 
 class UserController{
@@ -9,7 +10,10 @@ class UserController{
     }
 
     async create(user) {
-         const httpCode = await this.userSerializer.create(user)
+        const salt = await this.bcrypt.genSalt(saltRounds)
+        const hash = bcrypt.hash(user.password, salt)
+
+         const httpCode = await this.userSerializer.create({username: user.username, password: hash})
             var message
             switch (httpCode) {
                 case 500 :
@@ -26,9 +30,15 @@ class UserController{
     }
 
     async authenticate(user) {
-        const httpCode = await this.userSerializer.authenticate(user)
+        var result = await this.userSerializer.authenticate(user)
+        
+        if (result.hash) {
+            const authenticated = await this.bcrypt.compare(user.password, hash)
+            result.httpCode = authenticated ? 200 : 401
+        }
+
         var message
-        switch (httpCode) {
+        switch (result.httpCode) {
             case 404: 
                 message = "User not found"
                 break
@@ -43,7 +53,7 @@ class UserController{
                 break;
         }
 
-        return{message : message, statusCode: httpCode}
+        return{message : message, statusCode: result.httpCode}
     }
 }
 
