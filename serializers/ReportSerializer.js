@@ -30,7 +30,7 @@ class ReportSerializer {
             const reportQuery = this.reportQuery(report)
             const values = this.reportQueryValues(report)
             const resultReport = await this.client.query(reportQuery, values)
-            const symptomsIDs = await this.symptomsSerializer.create(report.symptoms)
+            const symptomsIDs = await this.symptomsSerializer.create(resultReport.insertId, report.symptoms)
             await this.pacientReportSerializer.create(cpf, resultReport.insertId)
             await this.reportSymptomSerializer.create(resultReport.insertId, symptomsIDs)
             console.log("Finished saving new report")
