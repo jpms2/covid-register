@@ -11,7 +11,7 @@ class UserController{
 
     async create(user) {
         const salt = await bcrypt.genSalt(parseInt(process.env.SALT_ROUNDS, 10))
-        const hash = bcrypt.hash(user.password, salt)
+        const hash = await bcrypt.hash(user.password, salt)
 
          const httpCode = await this.userSerializer.create({username: user.username, password: hash})
             var message
