@@ -33,7 +33,7 @@ class UserController{
         var result = await this.userSerializer.authenticate(user)
         
         if (result.hash) {
-            const authenticated = await this.bcrypt.compare(user.password, hash)
+            const authenticated = await bcrypt.compare(user.password, hash)
             result.httpCode = authenticated ? 200 : 401
         }
 
