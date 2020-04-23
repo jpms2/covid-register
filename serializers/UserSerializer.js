@@ -9,6 +9,7 @@ class UserSerializer {
 
     async create(user) {
         var httpCode = 201
+        console.log("user: " + user.username, " password: " + user.password)
         var queryValue = `INSERT INTO users (username, password) VALUES (?, ?)`
         var values = [user.username, user.password]
         
