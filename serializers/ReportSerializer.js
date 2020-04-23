@@ -36,7 +36,7 @@ class ReportSerializer {
             console.log("Finished saving new report")
 
             return httpCode
-        } catch (err) {   
+        } catch (err) {
             console.log ('error', err.message, err.stack)
             return 500
         }
