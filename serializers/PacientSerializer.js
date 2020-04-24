@@ -128,6 +128,7 @@ class PacientSerializer {
             const symptoms = await this.symptomsSerializer.find(symptomIDs)
             report.symptoms = symptoms
 
+            console.log(report.covid_exam == 1)
             report.covid_exam = report.covid_exam == 1
 
             reports.push({report: report})
