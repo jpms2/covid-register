@@ -142,7 +142,7 @@ class PacientSerializer {
         const totalPacientsQuery = `SELECT COUNT(*) AS pacientsCount FROM pacients`
         const totalPacients = await this.client.query(totalPacientsQuery)
         const offset = list.page_size * (list.page_index - 1)
-        var listQuery = `SELECT pac.cpf, pac.name, addr.reference_unit, rep.notification_date FROM pacients AS pac INNER JOIN addresses AS addr ON pac.address_ID = addr.address_ID INNER JOIN reports AS rep ON pac.report_ID = rep.report_ID`
+        var listQuery = `SELECT pac.cpf, pac.name, addr.reference_unit, rep.notification_date, rep.symptoms_start_date FROM pacients AS pac INNER JOIN addresses AS addr ON pac.address_ID = addr.address_ID INNER JOIN reports AS rep ON pac.report_ID = rep.report_ID`
 
         if (list.filter_by) {
             listQuery = listQuery + this.addFilterByQuery(list.filter_by)
@@ -176,6 +176,10 @@ class PacientSerializer {
             filterBy = filterBy + ` AND addr.notification_date LIKE '%${filter_by.notification_date}%'`
         }
 
+        if (filter_by.symptoms_start_date) {
+            filterBy = filterBy + ` AND addr.symptoms_start_date LIKE '%${filter_by.notification_date}%'`
+        }
+
         return filterBy
     }
 
@@ -194,11 +198,14 @@ class PacientSerializer {
                 case "notification_date":
                     orderBy = "rep." + order_by
                     break;
+
+                case "symptoms_start_date":
+                    orderBy = "rep." + order_by
                 default:
                     console.log("No implementation for this ordenation")
                     break;
             }
-            return ` ORDER BY ${order_by}`
+            return ` ORDER BY ${orderBy}`
     }
 }
 
