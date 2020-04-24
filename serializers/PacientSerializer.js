@@ -160,22 +160,23 @@ class PacientSerializer {
 
     addFilterByQuery(filter_by) {
         var filterBy
-        switch (filter_by.name) {
-            case "name":
-                filterBy = "pac." + filter_by.name
-                break
-            case "reference_unit":
-                filterBy = "addr." + filter_by.name
-                break
-            case "notification_date":
-                filterBy = "rep." + filter_by.name
-                break;
-            default:
-                console.log("No implementation for this filter")
-                break;
+        if (filter_by.cpf) {
+            filterBy = `WHERE pac.cpf LIKE '%${filter_by.cpf}%'` 
         }
 
-        return ` WHERE ${filterBy} LIKE '%${filter_by.value}%'`
+        if (filter_by.name) {
+            filterBy = filterBy + ` AND pac.name LIKE '%${filter_by.name}%'`
+        }
+
+        if (filter_by.reference_unit) {
+            filterBy = filterBy + ` AND addr.reference_unit LIKE '%${filter_by.reference_unit}%'`
+        }
+
+        if (filter_by.notification_date) {
+            filterBy = filterBy + ` AND addr.notification_date LIKE '%${filter_by.notification_date}%'`
+        }
+
+        return filter
     }
 
     addOrderByQuery(order_by) {
