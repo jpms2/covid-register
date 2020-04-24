@@ -176,7 +176,7 @@ class PacientSerializer {
             filterBy = filterBy + ` AND addr.notification_date LIKE '%${filter_by.notification_date}%'`
         }
 
-        return filter
+        return filterBy
     }
 
     addOrderByQuery(order_by) {
