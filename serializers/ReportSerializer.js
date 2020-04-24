@@ -59,8 +59,6 @@ class ReportSerializer {
     }
 
     async update(report) {
-        console.log(report)
-        console.log(report.covid_exam === true)
         if (report.data_origin) await this.updateReport(report.report_ID, "data_origin", report.data_origin)
         if (report.comorbidity) await this.updateReport(report.report_ID, "comorbidity", report.comorbidity)
         if (report.covid_exam) await this.updateReport(report.report_ID, "covid_exam", report.covid_exam === true ? 1 : 0)
@@ -73,6 +71,8 @@ class ReportSerializer {
     async updateReport(report_ID, columnName, value) {
         const query = `UPDATE reports SET ${columnName}=? WHERE report_ID=?`
         const values = [value, report_ID]
+
+        console.log("Query: " + query + " values = " + values)
         await this.client.query(query, values)
     }
 
