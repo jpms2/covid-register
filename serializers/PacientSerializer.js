@@ -176,7 +176,7 @@ class PacientSerializer {
                 break;
         }
 
-        return ` WHERE ${filterBy} LIKE '${filter_by.value}'`
+        return ` WHERE ${filterBy} LIKE '%${filter_by.value}%'`
     }
 
     addOrderByQuery(order_by) {
