@@ -153,6 +153,7 @@ class PacientSerializer {
         }
 
         listQuery = listQuery + ` LIMIT ${list.page_size} OFFSET ${offset}`
+        console.log(listQuery)
         const result = await this.client.query(listQuery)
 
         return {total_pacients: totalPacients[0].pacientsCount, pacients: result}
