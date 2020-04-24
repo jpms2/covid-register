@@ -153,7 +153,6 @@ class PacientSerializer {
         }
 
         listQuery = listQuery + ` LIMIT ${list.page_size} OFFSET ${offset}`
-        console.log(listQuery)
         const result = await this.client.query(listQuery)
 
         return {total_pacients: totalPacients[0].pacientsCount, pacients: result}
@@ -162,7 +161,7 @@ class PacientSerializer {
     addFilterByQuery(filter_by) {
         var filterBy
         if (filter_by.cpf) {
-            filterBy = `WHERE pac.cpf LIKE '%${filter_by.cpf}%'` 
+            filterBy = ` WHERE pac.cpf LIKE '%${filter_by.cpf}%'` 
         }
 
         if (filter_by.name) {
