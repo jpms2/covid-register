@@ -162,20 +162,20 @@ class PacientSerializer {
         var filterBy
         switch (filter_by.name) {
             case "name":
-                filterBy = "pac." + order_by
+                filterBy = "pac." + filter_by.name
                 break
             case "reference_unit":
-                filterBy = "addr." + order_by
+                filterBy = "addr." + filter_by.name
                 break
             case "notification_date":
-                filterBy = "rep." + order_by
+                filterBy = "rep." + filter_by.name
                 break;
             default:
                 console.log("No implementation for this filter")
                 break;
         }
 
-        return ` WHERE ${filterBy} LIKE '${filter_by.value}'`
+        return ` WHERE ${filter_by.name} LIKE '${filter_by.value}'`
     }
 
     addOrderByQuery(order_by) {
