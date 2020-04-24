@@ -201,6 +201,7 @@ class PacientSerializer {
 
                 case "symptoms_start_date":
                     orderBy = "rep." + order_by
+                    break;
                 default:
                     console.log("No implementation for this ordenation")
                     break;
