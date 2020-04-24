@@ -60,6 +60,7 @@ class ReportSerializer {
 
     async update(report) {
         console.log(report)
+        console.log(report.covid_exam === true)
         if (report.data_origin) await this.updateReport(report.report_ID, "data_origin", report.data_origin)
         if (report.comorbidity) await this.updateReport(report.report_ID, "comorbidity", report.comorbidity)
         if (report.covid_exam) await this.updateReport(report.report_ID, "covid_exam", report.covid_exam === true ? 1 : 0)
