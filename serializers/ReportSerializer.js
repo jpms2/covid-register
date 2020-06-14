@@ -14,6 +14,7 @@ class ReportSerializer {
     }
 
     async create(cpf, report) {
+        report.new_report = true
         const reportQuery = this.reportQuery(report)
         const values = this.reportQueryValues(report)
         const resultReport = await this.client.query(reportQuery, values)
@@ -27,6 +28,7 @@ class ReportSerializer {
         if (httpCode === 409) return httpCode
 
         try {
+            report.new_report = true
             const reportQuery = this.reportQuery(report)
             const values = this.reportQueryValues(report)
             const resultReport = await this.client.query(reportQuery, values)
@@ -44,17 +46,17 @@ class ReportSerializer {
 
     reportQuery(report) {
         if (report.covid_exam) {
-            return `INSERT INTO reports (data_origin, comorbidity, covid_exam, covid_result, situation, notification_date, symptoms_start_date) VALUES (?, ?, ?, ?, ?, ?, ?)`
+            return `INSERT INTO reports (data_origin, comorbidity, covid_exam, covid_result, situation, notification_date, symptoms_start_date, other_comorbidities, other_symptoms, new_report) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
         } else {
-            return `INSERT INTO reports (data_origin, comorbidity, covid_exam, situation, notification_date, symptoms_start_date) VALUES (?, ?, ?, ?, ?, ?)`
+            return `INSERT INTO reports (data_origin, comorbidity, covid_exam, situation, notification_date, symptoms_start_date, other_comorbidities, other_symptoms, new_report) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
         }
     }
 
     reportQueryValues(report) {
         if (report.covid_exam) {
-            return [report.data_origin, report.comorbidity, report.covid_exam === true ? 1 : 0, report.covid_result, report.situation, report.notification_date, report.symptoms_start_date]
+            return [report.data_origin, report.comorbidity, report.covid_exam === true ? 1 : 0, report.covid_result, report.situation, report.notification_date, report.symptoms_start_date, report.other_comorbidities, report.other_symptoms, report.new_report === true ? 1 : 0]
         } else {
-            return [report.data_origin, report.comorbidity, report.covid_exam === true ? 1 : 0, report.situation, report.notification_date, report.symptoms_start_date]
+            return [report.data_origin, report.comorbidity, report.covid_exam === true ? 1 : 0, report.situation, report.notification_date, report.symptoms_start_date, report.other_comorbidities, report.other_symptoms, report.new_report === true ? 1 : 0]
         }
     }
 
@@ -66,6 +68,8 @@ class ReportSerializer {
         if (report.situation) await this.updateReport(report.report_ID, "situation", report.situation)
         if (report.notification_date) await this.updateReport(report.report_ID, "notification_date", report.notification_date)
         if (report.symptoms_start_date) await this.updateReport(report.report_ID, "symptoms_start_date", report.symptoms_start_date)
+        if (report.other_comorbidities) await this.updateReport(report.report_ID, "other_comorbidities", report.other_comorbidities)
+        if (report.other_symptoms) await this.updateReport(report.report_ID, "other_symptoms", report.other_symptoms)
     }
 
     async updateReport(report_ID, columnName, value) {

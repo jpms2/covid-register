@@ -36,6 +36,8 @@ CREATE TABLE `reports` (
     `situation` varchar(255),
     `notification_date` date,
     `symptoms_start_date` date,
+    `other_comorbidities` varchar(255),
+    `other_symptoms` varchar(255),
     PRIMARY KEY (`report_ID`)
 );
 
