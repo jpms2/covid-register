@@ -153,6 +153,7 @@ class PacientSerializer {
         }
 
         listQuery = listQuery + ` LIMIT ${list.page_size} OFFSET ${offset}`
+        console.log(listQuery)
         const result = await this.client.query(listQuery)
 
         return {total_pacients: totalPacients[0].pacientsCount, pacients: result}
@@ -160,24 +161,30 @@ class PacientSerializer {
 
     addFilterByQuery(filter_by) {
         var filterBy
+        var isFirst = true
         if (filter_by.cpf) {
             filterBy = ` WHERE pac.cpf LIKE '%${filter_by.cpf}%'` 
+            isFirst = false
         }
 
         if (filter_by.name) {
-            filterBy = filterBy + ` AND pac.name LIKE '%${filter_by.name}%'`
+            filterBy = filterBy + isFirst ? ` WHERE pac.name LIKE '%${filter_by.name}%'` : ` AND pac.name LIKE '%${filter_by.name}%'`
+            isFirst = false
         }
 
         if (filter_by.reference_unit) {
-            filterBy = filterBy + ` AND addr.reference_unit LIKE '%${filter_by.reference_unit}%'`
+            filterBy = filterBy + isFirst ? ` WHERE addr.reference_unit LIKE '%${filter_by.reference_unit}%'` : ` AND addr.reference_unit LIKE '%${filter_by.reference_unit}%'`
+            isFirst = false
         }
 
         if (filter_by.notification_date) {
-            filterBy = filterBy + ` AND addr.notification_date LIKE '%${filter_by.notification_date}%'`
+            filterBy = filterBy + isFirst ? ` WHERE addr.notification_date LIKE '%${filter_by.notification_date}%'` : ` AND addr.notification_date LIKE '%${filter_by.notification_date}%'`
+            isFirst = false
         }
 
         if (filter_by.symptoms_start_date) {
-            filterBy = filterBy + ` AND addr.symptoms_start_date LIKE '%${filter_by.notification_date}%'`
+            filterBy = filterBy + isFirst ? ` WHERE addr.symptoms_start_date LIKE '%${filter_by.notification_date}%'` : ` AND addr.symptoms_start_date LIKE '%${filter_by.notification_date}%'`
+            isFirst = false
         }
 
         return filterBy
