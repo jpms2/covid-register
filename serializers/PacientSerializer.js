@@ -178,7 +178,7 @@ class PacientSerializer {
         }
 
         if (filter_by.notification_date) {
-            filterBy = filterBy + isFirst ? ` WHERE addr.notification_date LIKE '%${filter_by.notification_date}%'` : ` AND addr.notification_date LIKE '%${filter_by.notification_date}%'`
+            filterBy = filterBy + isFirst ? ` WHERE rep.notification_date LIKE '%${filter_by.notification_date}%'` : ` AND rep.notification_date LIKE '%${filter_by.notification_date}%'`
             isFirst = false
         }
 
